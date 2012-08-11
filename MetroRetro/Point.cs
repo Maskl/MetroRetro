@@ -59,6 +59,11 @@ namespace MetroRetro
             return new Point(X / 2, Y / 2);
         }
 
+        public bool IsInside(Point margin0, Point margin1)
+        {
+            return X > margin0.X && X < margin1.X && Y > margin0.Y && Y < margin1.Y;
+        }
+
         public Point Clamp(Point margin0, Point margin1)
         {
             return new Point(
@@ -82,6 +87,22 @@ namespace MetroRetro
         public RectangleF ToRectangleWith(Point point)
         {
             return new RectangleF(X, Y, point.X, point.Y);
+        }
+
+        public Point Neg()
+        {
+            return new Point(-X, -Y);
+        }
+
+        public Point Normalise()
+        {
+            var l = Length();
+            return l == 0 ? new Point(0, 0) : new Point(X / l, Y / l);
+        }
+
+        private float Length()
+        {
+            return (float) Math.Sqrt(X*X + Y*Y);
         }
     }
 }

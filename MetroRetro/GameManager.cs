@@ -55,7 +55,7 @@ namespace MetroRetro
             _currentGame.NewGame();
         }
 
-        private float oldElapsedTimeF;
+        private float _oldElapsedTimeF;
         public void Update(long elapsedTime, TargetBase target, DeviceManager deviceManager)
         {
             if (_currentGame == null)
@@ -69,8 +69,8 @@ namespace MetroRetro
             context2D.TextAntialiasMode = TextAntialiasMode.Grayscale;
 
             var elapsedTimeF = elapsedTime / 1000.0f;
-            var dt = elapsedTimeF - oldElapsedTimeF;
-            oldElapsedTimeF = elapsedTimeF;
+            var dt = elapsedTimeF - _oldElapsedTimeF;
+            _oldElapsedTimeF = elapsedTimeF;
             _currentGame.Update(context2D, target, screenSize, dt, elapsedTimeF);
 
             context2D.EndDraw();
