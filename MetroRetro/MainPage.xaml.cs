@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MetroRetro.Games;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
@@ -18,33 +19,37 @@ namespace MetroRetro
 {
     public sealed partial class MainPage
     {
-        public Dictionary<InputType, Border> ButtonsDictionary;
-        public Dictionary<Border, Color> ButtonsLastColors;
+        private readonly Dictionary<InputType, Border> _buttonsDictionary;
+        private readonly Dictionary<Border, Color> _buttonsLastColors;
+        private GameManager _gameManager;
 
-        public MainPage()
+        public MainPage(GameManager gameManager)
         {
             InitializeComponent();
-
-            ButtonsDictionary = new Dictionary<InputType, Border>
+            
+            _buttonsDictionary = new Dictionary<InputType, Border>
                                     {
-                                        {InputType.Space, SpaceButton},
-                                        {InputType.Up, UpArrowButton},
-                                        {InputType.Down, DownArrowButton},
-                                        {InputType.Left, LeftArrowButton},
-                                        {InputType.Right, RightArrowButton}
+                                        {InputType.Space,   SpaceButton},
+                                        {InputType.Up,      UpArrowButton},
+                                        {InputType.Down,    DownArrowButton},
+                                        {InputType.Left,    LeftArrowButton},
+                                        {InputType.Right,   RightArrowButton}
                                     };
 
-            ButtonsLastColors = new Dictionary<Border, Color>
+            _buttonsLastColors = new Dictionary<Border, Color>
                                     {
-                                        {SpaceButton, Colors.White},
-                                        {UpArrowButton, Colors.White},
-                                        {DownArrowButton, Colors.White},
-                                        {LeftArrowButton, Colors.White},
-                                        {RightArrowButton, Colors.White}
+                                        {SpaceButton,       Colors.White},
+                                        {UpArrowButton,     Colors.White},
+                                        {DownArrowButton,   Colors.White},
+                                        {LeftArrowButton,   Colors.White},
+                                        {RightArrowButton,  Colors.White}
                                     };
+
+            _gameManager = gameManager;
         }
 
-        public void ButtonPressedOrReleased(Border button, InputState state)
+        // Sets colors to buttons depends on event type.
+        private void ButtonPressedOrReleased(Border button, InputState state)
         {
             var background = Colors.White;
             var foreground = Colors.Black;
@@ -55,62 +60,53 @@ namespace MetroRetro
                 break;
 
                 case InputState.Released:
-                    background = ButtonsLastColors[button];
+                    background = _buttonsLastColors[button];
                 break;
 
                 case InputState.Over:
                     background = Colors.Yellow;
-                    ButtonsLastColors[button] = background;
+                    _buttonsLastColors[button] = background;
                 break;
 
                 case InputState.Out:
                     background = Colors.White;
-                    ButtonsLastColors[button] = background;
+                    _buttonsLastColors[button] = background;
                 break;
             }
-
 
             button.Background = new SolidColorBrush(background);
             button.BorderBrush = new SolidColorBrush(foreground);
         }
 
-        private readonly List<string> _debugTexts = new List<string>(); 
-        public void AddDebugText(string text)
+        // Pass input event to GameManager
+        private void HandleInput(InputType inputType, InputState state)
         {
-            _debugTexts.Add(text);
-            if (_debugTexts.Count > 10)
-                _debugTexts.RemoveAt(0);
-
-            DebugText.Text = _debugTexts.Aggregate("", (current, debugText) => current + (debugText + "\n"));
+            ButtonPressedOrReleased(_buttonsDictionary[inputType], state);
+            _gameManager.HandleInput(inputType, state);
         }
 
-        public void HandleInput(InputType inputType, InputState state)
-        {
-            ButtonPressedOrReleased(ButtonsDictionary[inputType], state);
-            AddDebugText(inputType + " " + state);
-        }
-
+        // Input methods:
         private void InputButtonPointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            var inputType = ButtonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
+            var inputType = _buttonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
             HandleInput(inputType, InputState.Pressed);
         }
 
         private void InputButtonPointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            var inputType = ButtonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
+            var inputType = _buttonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
             HandleInput(inputType, InputState.Released);
         }
 
         private void InputButtonPointerOver(object sender, PointerRoutedEventArgs e)
         {
-            var inputType = ButtonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
+            var inputType = _buttonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
             HandleInput(inputType, InputState.Over);
         }
 
         private void InputButtonPointerOut(object sender, PointerRoutedEventArgs e)
         {
-            var inputType = ButtonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
+            var inputType = _buttonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
             HandleInput(inputType, InputState.Out);
         }
 
@@ -164,22 +160,15 @@ namespace MetroRetro
             return null;
         }
 
-    }
+        // Simply method to show debug informations.
+        private readonly List<string> _debugTexts = new List<string>();
+        public void AddDebugText(string text)
+        {
+            _debugTexts.Add(text);
+            if (_debugTexts.Count > 10)
+                _debugTexts.RemoveAt(0);
 
-    public enum InputType
-    {
-        Up,
-        Down,
-        Left,
-        Right,
-        Space
-    }
-
-    public enum InputState
-    {
-        Pressed,
-        Released,
-        Over,
-        Out
+            DebugText.Text = _debugTexts.Aggregate("", (current, debugText) => current + (debugText + "\n"));
+        }
     }
 }
