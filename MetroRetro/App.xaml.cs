@@ -53,7 +53,7 @@ namespace MetroRetro
             _deviceManager = new DeviceManager();
 
             // New CubeRenderer
-            _renderer = new MetroRetroRenderer();
+            _renderer = new MetroRetroRenderer(_gameManager);
             var fpsRenderer = new FpsRenderer();
 
             // Use CoreWindowTarget as the rendering target (Initialize SwapChain, RenderTargetView, DepthStencilView, BitmapTarget)
@@ -76,8 +76,12 @@ namespace MetroRetro
 
             // Callback on DpiChanged
             DisplayProperties.LogicalDpiChanged += DisplayPropertiesLogicalDpiChanged;
-
+            
+            // Create Game Manager
             _gameManager.Create(_mainPage, _renderer);
+
+            // And start first game
+            _gameManager.Start(GameType.Test);
         }
 
         void DisplayPropertiesLogicalDpiChanged(object sender)

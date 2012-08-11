@@ -7,15 +7,15 @@ using CommonDX;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using Matrix = SharpDX.DirectWrite.Matrix;
+using Matrix = SharpDX.Matrix;
 
 namespace MetroRetro.Games
 {
-    class Pong : IGame
+    class Test : IGame
     {
         private GameManager _gameManager;
 
-        public Pong(GameManager gameManager)
+        public Test(GameManager gameManager)
         {
             _gameManager = gameManager;
         }
@@ -42,7 +42,7 @@ namespace MetroRetro.Games
 
             var sizeX = (float)target.RenderTargetBounds.Width;
             var sizeY = (float)target.RenderTargetBounds.Height;
-            var globalScaling = SharpDX.Matrix.Scaling(Math.Min(sizeX, sizeY));
+            var globalScaling = Matrix.Scaling(Math.Min(sizeX, sizeY));
 
             var centerX = (float)(target.RenderTargetBounds.X + sizeX / 2.0f);
             var centerY = (float)(target.RenderTargetBounds.Y + sizeY / 2.0f);
@@ -84,12 +84,12 @@ namespace MetroRetro.Games
             context2D.TextAntialiasMode = TextAntialiasMode.Grayscale;
             float t = dt / 1000.0f;
 
-            context2D.Transform = SharpDX.Matrix.RotationZ((float)(Math.Cos(t * 2.0f * Math.PI * 0.5f))) * SharpDX.Matrix.Translation(centerX, centerY, 0);
+            context2D.Transform = Matrix.RotationZ((float)(Math.Cos(t * 2.0f * Math.PI * 0.5f))) * Matrix.Translation(centerX, centerY, 0);
 
             context2D.DrawText("SharpDX\nDirect2D1\nDirectWrite", _textFormat, new RectangleF(-sizeX / 2.0f, -sizeY / 2.0f, +sizeX/2.0f, sizeY/2.0f), sceneColorBrush);
 
             float scaling = (float)(Math.Cos(t * 2.0 * Math.PI * 0.25) * 0.5f + 0.5f) * 0.5f + 0.5f;
-            context2D.Transform = SharpDX.Matrix.Scaling(scaling) * SharpDX.Matrix.RotationZ(t * 1.5f) * SharpDX.Matrix.Translation(centerX, centerY, 0);
+            context2D.Transform = Matrix.Scaling(scaling) * Matrix.RotationZ(t * 1.5f) * Matrix.Translation(centerX, centerY, 0);
 
             context2D.DrawGeometry(_pathGeometry1, sceneColorBrush, 2.0f);
 
