@@ -58,7 +58,7 @@ namespace MetroRetro
 
             var context2D = target.DeviceManager.ContextDirect2D;
             context2D.BeginDraw();
-            context2D.Clear(GameColors.BackgroundColorNormal);
+            context2D.Clear(GamesParams.BackgroundColorNormal);
             context2D.TextAntialiasMode = TextAntialiasMode.Grayscale;
 
             var elapsedTimeF = elapsedTime / 1000.0f;

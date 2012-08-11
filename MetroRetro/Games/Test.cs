@@ -73,12 +73,12 @@ namespace MetroRetro.Games
 
             context.Transform = Matrix.RotationZ((float)(Math.Cos(t * 2.0f * Math.PI * 0.5f))) * Matrix.Translation(centerX, centerY, 0);
 
-            context.DrawText("SharpDX\nDirect2D1\nDirectWrite", _textFormat, new RectangleF(-screenSize.X / 2.0f, -screenSize.Y / 2.0f, +screenSize.X / 2.0f, screenSize.Y / 2.0f), GameColors.AdditionalColor);
+            context.DrawText("SharpDX\nDirect2D1\nDirectWrite", _textFormat, new RectangleF(-screenSize.X / 2.0f, -screenSize.Y / 2.0f, +screenSize.X / 2.0f, screenSize.Y / 2.0f), GamesParams.AdditionalColor);
 
             var scaling = (float)(Math.Cos(t * 2.0 * Math.PI * 0.25) * 0.5f + 0.5f) * 0.5f + 0.5f;
             context.Transform = Matrix.Scaling(scaling) * Matrix.RotationZ(t * 1.5f) * Matrix.Translation(centerX, centerY, 0);
 
-            context.DrawGeometry(_pathGeometry1, GameColors.EnemyColor, 2.0f);
+            context.DrawGeometry(_pathGeometry1, GamesParams.EnemyColor, 2.0f);
         }
 
         public override void KeyPressed(InputType key)

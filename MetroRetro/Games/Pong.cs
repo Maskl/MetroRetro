@@ -27,10 +27,12 @@ namespace MetroRetro.Games
         private float _enemySpeed = 0.01f;
         private float _ballSpeed = 0.01f;
 
+        private Point _padSize = new Point(0.05f, 0.25f);
+
         public override void NewGame()
         {
-            _playerPos = new Point(0.05f, 0.5f);
-            _enemyPos  = new Point(0.95f, 0.5f);
+            _playerPos = new Point(GamesParams.MarginX0, 0.5f);
+            _enemyPos  = new Point(GamesParams.MarginX1, 0.5f);
             _playerDir = new Point(0.0f, 0.0f);
         }
 
@@ -40,13 +42,20 @@ namespace MetroRetro.Games
 
         public override void Update(DeviceContext context, TargetBase target, Point screenSize, float dt, float elapsedTime)
         {
-            _playerPos = _playerPos.Add(_playerDir.Mul(dt));
+            _playerPos = _playerPos.Add(_playerDir.Mul(dt)).Clamp(GamesParams.Margin0.Add(_padSize.Half()), GamesParams.Margin1.Sub(_padSize.Half()));
 
-            var playerBox = _playerPos.ToBox(new Point(0.05f, 0.3f));
-            var enemyBox = _enemyPos.ToBox(new Point(0.05f, 0.3f));
+            var playerBox = _playerPos.ToBox(_padSize);
+            var enemyBox = _enemyPos.ToBox(_padSize);
 
-            context.FillRectangle(screenSize.ApplyTo(playerBox), GameColors.PlayerColor);
-            context.FillRectangle(screenSize.ApplyTo(enemyBox), GameColors.EnemyColor);
+            context.FillRectangle(screenSize.ApplyTo(playerBox), GamesParams.PlayerColor);
+            context.FillRectangle(screenSize.ApplyTo(enemyBox), GamesParams.EnemyColor);
+
+            DrawBoardBorder(context, screenSize);
+        }
+
+        protected void DrawBoardBorder(DeviceContext context, Point screenSize)
+        {
+            context.DrawRectangle(screenSize.ApplyTo(GamesParams.Margin0.ToRectangleWith(GamesParams.Margin1)), GamesParams.ObstaclesColor, 5);
         }
 
         public override void KeyPressed(InputType key)
