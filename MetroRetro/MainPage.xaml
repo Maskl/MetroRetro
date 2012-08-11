@@ -156,6 +156,39 @@
         </Border>
     </Grid>
 
+    <!-- Next button -->
+    <Grid
+        x:Name="NextContainer"
+        Height="40"
+        Width="110"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Bottom"
+        Margin="1246,0,10,718">
+        <Border
+            x:Name="NextButton"
+            Grid.Row="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Margin="5"
+            Padding="0"
+            Background="White"
+            BorderBrush="Black"
+            BorderThickness="2"
+            PointerPressed="InputButtonPointerPressed"
+            PointerReleased="InputButtonPointerReleased"
+            PointerEntered="InputButtonPointerOver"
+            PointerExited="InputButtonPointerOut">
+            <TextBlock
+                Text="next"
+                FontFamily="Segoe UI"
+                FontSize="18.667"
+                Foreground="Black"
+                TextAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+        </Border>
+    </Grid>
+  
     <!-- Points text -->
     <TextBlock
         x:Name="PointsText"
@@ -180,6 +213,6 @@
         HorizontalAlignment="Left"
         TextWrapping="Wrap"
         VerticalAlignment="Top"
-        FontSize="21.333" />
+        FontSize="21.333" Foreground="#FFF1C54E" />
 
 </SwapChainBackgroundPanel>

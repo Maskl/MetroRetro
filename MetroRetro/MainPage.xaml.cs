@@ -29,20 +29,22 @@ namespace MetroRetro
             
             _buttonsDictionary = new Dictionary<InputType, Border>
                                     {
-                                        {InputType.Space,   SpaceButton},
-                                        {InputType.Up,      UpArrowButton},
-                                        {InputType.Down,    DownArrowButton},
-                                        {InputType.Left,    LeftArrowButton},
-                                        {InputType.Right,   RightArrowButton}
+                                        {InputType.Space, SpaceButton},
+                                        {InputType.Up, UpArrowButton},
+                                        {InputType.Down, DownArrowButton},
+                                        {InputType.Left, LeftArrowButton},
+                                        {InputType.Right, RightArrowButton},
+                                        {InputType.Next, NextButton}
                                     };
 
             _buttonsLastColors = new Dictionary<Border, Color>
                                     {
-                                        {SpaceButton,       Colors.White},
-                                        {UpArrowButton,     Colors.White},
-                                        {DownArrowButton,   Colors.White},
-                                        {LeftArrowButton,   Colors.White},
-                                        {RightArrowButton,  Colors.White}
+                                        {SpaceButton,  Colors.White},
+                                        {UpArrowButton, Colors.White},
+                                        {DownArrowButton, Colors.White},
+                                        {LeftArrowButton, Colors.White},
+                                        {RightArrowButton, Colors.White},
+                                        {NextButton, Colors.White}
                                     };
 
             _gameManager = gameManager;
@@ -155,6 +157,10 @@ namespace MetroRetro
                 case VirtualKey.Right:
                 case VirtualKey.D:
                     return InputType.Right;
+
+                case VirtualKey.F3:
+                case VirtualKey.N:
+                    return InputType.Next;
             }
 
             return null;

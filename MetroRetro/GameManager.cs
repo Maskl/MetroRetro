@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommonDX;
 using MetroRetro.Games;
 using SharpDX.Direct2D1;
@@ -27,16 +28,22 @@ namespace MetroRetro
             _currentGame = null;
         }
 
-        public void HandleInput(InputType inputType, InputState state)
+        public void HandleInput(InputType key, InputState state)
         {
             if (_currentGame == null)
                 return;
 
+            if (state == InputState.Released && key == InputType.Next)
+            {
+                StartNextGame();
+                return;
+            }
+
             if (state == InputState.Pressed)
-                _currentGame.KeyPressed(inputType);
+                _currentGame.KeyPressed(key);
 
             if (state == InputState.Released)
-                _currentGame.KeyReleased(inputType);
+                _currentGame.KeyReleased(key);
         }
 
         public void Start(GameType game)
@@ -64,7 +71,7 @@ namespace MetroRetro
             var elapsedTimeF = elapsedTime / 1000.0f;
             var dt = elapsedTimeF - oldElapsedTimeF;
             oldElapsedTimeF = elapsedTimeF;
-            _currentGame.Update(context2D, target, screenSize, dt, elapsedTime);
+            _currentGame.Update(context2D, target, screenSize, dt, elapsedTimeF);
 
             context2D.EndDraw();
         }
@@ -73,12 +80,19 @@ namespace MetroRetro
         {
             Start(GameType.Pong);
         }
+
+        public void StartNextGame()
+        {
+            var rand = new Random();
+            Start( (GameType) rand.Next((int)GameType.GamesCount) );
+        }
     }
 
     public enum GameType
     {
-        Test,
-        Pong
+        Test = 0,
+        Pong = 1,
+        GamesCount = 2
     }
 
     public enum InputType
@@ -87,7 +101,8 @@ namespace MetroRetro
         Down,
         Left,
         Right,
-        Space
+        Space,
+        Next
     }
 
     public enum InputState
