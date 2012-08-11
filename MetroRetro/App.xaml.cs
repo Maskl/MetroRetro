@@ -23,7 +23,7 @@ namespace MetroRetro
     {
         private DeviceManager _deviceManager;
         private SwapChainBackgroundPanelTarget _target;
-        private MetroRetroRenderer _renderer;
+        private Renderer _renderer;
         private GameManager _gameManager;
         private MainPage _mainPage;
 
@@ -53,7 +53,7 @@ namespace MetroRetro
             _deviceManager = new DeviceManager();
 
             // New CubeRenderer
-            _renderer = new MetroRetroRenderer(_gameManager);
+            _renderer = new Renderer(_gameManager);
             var fpsRenderer = new FpsRenderer();
 
             // Use CoreWindowTarget as the rendering target (Initialize SwapChain, RenderTargetView, DepthStencilView, BitmapTarget)
@@ -81,7 +81,7 @@ namespace MetroRetro
             _gameManager.Create(_mainPage, _renderer);
 
             // And start first game
-            _gameManager.Start(GameType.Test);
+            _gameManager.StartFirstGame();
         }
 
         void DisplayPropertiesLogicalDpiChanged(object sender)

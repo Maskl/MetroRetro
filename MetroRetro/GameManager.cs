@@ -10,12 +10,12 @@ namespace MetroRetro.Games
     public class GameManager
     {
         public MainPage Page { get; set; }
-        public MetroRetroRenderer Renderer { get; set; }
+        public Renderer Renderer { get; set; }
 
         private Dictionary<GameType, IGame> _games;
         private IGame _currentGame;
 
-        public void Create(MainPage mainPage, MetroRetroRenderer renderer)
+        public void Create(MainPage mainPage, Renderer renderer)
         {
             Page = mainPage;
             Renderer = renderer;
@@ -49,6 +49,11 @@ namespace MetroRetro.Games
                 return;
 
             _currentGame.Update(dt, target, deviceManager);
+        }
+
+        public void StartFirstGame()
+        {
+            Start(GameType.Pong);
         }
     }
 

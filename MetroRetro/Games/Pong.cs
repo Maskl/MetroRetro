@@ -30,6 +30,7 @@ namespace MetroRetro.Games
         
         private TextFormat _textFormat;
         private PathGeometry1 _pathGeometry1;
+
         public void Update(long dt, TargetBase target, DeviceManager deviceManager)
         {
             Brush sceneColorBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White);
@@ -93,6 +94,8 @@ namespace MetroRetro.Games
 
             context2D.DrawGeometry(_pathGeometry1, sceneColorBrush, 2.0f);
 
+
+            context2D.DrawRectangle(new RectangleF(10, 10, 200, 200), sceneColorBrush );
             context2D.EndDraw();
         }
 

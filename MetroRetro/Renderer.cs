@@ -9,7 +9,7 @@ using Matrix = SharpDX.Matrix;
 
 namespace MetroRetro
 {
-    public class MetroRetroRenderer
+    public class Renderer
     {
         private Stopwatch _clock;
         private readonly GameManager _gameManager;
@@ -17,7 +17,7 @@ namespace MetroRetro
 
         public bool Show { get; set; }
 
-        public MetroRetroRenderer(GameManager gameManager)
+        public Renderer(GameManager gameManager)
         {
             _gameManager = gameManager;
             Show = true;
