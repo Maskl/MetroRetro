@@ -29,44 +29,32 @@ namespace MetroRetro.Games
         
         private TextFormat _textFormat;
         private PathGeometry1 _pathGeometry1;
-        public override void Update(long dt, TargetBase target, DeviceManager deviceManager)
+        public override void Update(long dt, Point screenSize, DeviceContext context, TargetBase target)
         {
-            Brush sceneColorBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White);
-
-            var context2D = target.DeviceManager.ContextDirect2D;
-
-            context2D.BeginDraw();
-
-            context2D.Clear(Colors.Black);
-
-            var sizeX = (float)target.RenderTargetBounds.Width;
-            var sizeY = (float)target.RenderTargetBounds.Height;
-            var globalScaling = Matrix.Scaling(Math.Min(sizeX, sizeY));
-
-            var centerX = (float)(target.RenderTargetBounds.X + sizeX / 2.0f);
-            var centerY = (float)(target.RenderTargetBounds.Y + sizeY / 2.0f);
+            var centerX = screenSize.X / 2;
+            var centerY = screenSize.Y / 2;
 
             if (_textFormat == null)
             {
                 // Initialize a TextFormat
-                _textFormat = new TextFormat(target.DeviceManager.FactoryDirectWrite, "Calibri", 96 * sizeX / 1920) { TextAlignment = TextAlignment.Center, ParagraphAlignment = ParagraphAlignment.Center };
+                _textFormat = new TextFormat(target.DeviceManager.FactoryDirectWrite, "Calibri", 96 * screenSize.X / 1920) { TextAlignment = TextAlignment.Center, ParagraphAlignment = ParagraphAlignment.Center };
             }
 
             if (_pathGeometry1 == null)
             {
-                var sizeShape = sizeX / 4.0f;
+                var sizeShape = screenSize.X / 4.0f;
 
                 // Creates a random geometry inside a circle
                 _pathGeometry1 = new PathGeometry1(target.DeviceManager.FactoryDirect2D);
                 var pathSink = _pathGeometry1.Open();
                 var startingPoint = new DrawingPointF(sizeShape * 0.5f, 0.0f);
                 pathSink.BeginFigure(startingPoint, FigureBegin.Hollow);
-                for (int i = 0; i < 128; i++)
+                for (var i = 0; i < 128; i++)
                 {
-                    float angle = (float)i / 128.0f * (float)Math.PI * 2.0f;
-                    float R = (float)(Math.Cos(angle) * 0.1f + 0.4f);
+                    var angle = (float)i / 128.0f * (float)Math.PI * 2.0f;
+                    var R = (float)(Math.Cos(angle) * 0.1f + 0.4f);
                     R *= sizeShape;
-                    DrawingPointF point1 = new DrawingPointF(R * (float)Math.Cos(angle), R * (float)Math.Sin(angle));
+                    var point1 = new DrawingPointF(R * (float)Math.Cos(angle), R * (float)Math.Sin(angle));
 
                     if ((i & 1) > 0)
                     {
@@ -80,19 +68,19 @@ namespace MetroRetro.Games
                 pathSink.Close();
             }
 
-            context2D.TextAntialiasMode = TextAntialiasMode.Grayscale;
-            float t = dt / 1000.0f;
+            context.TextAntialiasMode = TextAntialiasMode.Grayscale;
+            var t = dt / 1000.0f;
 
-            context2D.Transform = Matrix.RotationZ((float)(Math.Cos(t * 2.0f * Math.PI * 0.5f))) * Matrix.Translation(centerX, centerY, 0);
+            context.Transform = Matrix.RotationZ((float)(Math.Cos(t * 2.0f * Math.PI * 0.5f))) * Matrix.Translation(centerX, centerY, 0);
 
-            context2D.DrawText("SharpDX\nDirect2D1\nDirectWrite", _textFormat, new RectangleF(-sizeX / 2.0f, -sizeY / 2.0f, +sizeX/2.0f, sizeY/2.0f), sceneColorBrush);
+            context.DrawText("SharpDX\nDirect2D1\nDirectWrite", _textFormat, new RectangleF(-screenSize.X / 2.0f, -screenSize.Y / 2.0f, +screenSize.X / 2.0f, screenSize.Y / 2.0f), AdditionalColor);
 
-            float scaling = (float)(Math.Cos(t * 2.0 * Math.PI * 0.25) * 0.5f + 0.5f) * 0.5f + 0.5f;
-            context2D.Transform = Matrix.Scaling(scaling) * Matrix.RotationZ(t * 1.5f) * Matrix.Translation(centerX, centerY, 0);
+            var scaling = (float)(Math.Cos(t * 2.0 * Math.PI * 0.25) * 0.5f + 0.5f) * 0.5f + 0.5f;
+            context.Transform = Matrix.Scaling(scaling) * Matrix.RotationZ(t * 1.5f) * Matrix.Translation(centerX, centerY, 0);
 
-            context2D.DrawGeometry(_pathGeometry1, sceneColorBrush, 2.0f);
+            context.DrawGeometry(_pathGeometry1, EnemyColor, 2.0f);
 
-            context2D.EndDraw();
+            context.EndDraw();
         }
 
         public override void KeyPressed(InputType key)

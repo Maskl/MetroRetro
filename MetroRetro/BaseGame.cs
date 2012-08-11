@@ -2,13 +2,11 @@
 using MetroRetro.Games;
 using SharpDX;
 using SharpDX.Direct2D1;
-
 namespace MetroRetro
 {
     abstract class BaseGame
     {
-        private GameManager _gameManager;
-
+        protected GameManager _gameManager;
 
         protected BaseGame(GameManager gameManager)
         {
@@ -17,7 +15,7 @@ namespace MetroRetro
 
         public abstract void NewGame();
         public abstract void EndGame();
-        public abstract void Update(long dt, TargetBase target, DeviceManager deviceManager);
+        public abstract void Update(long dt, Point screenSize, DeviceContext context, TargetBase target);
         public abstract void KeyPressed(InputType key);
         public abstract void KeyReleased(InputType key);
 
@@ -26,6 +24,7 @@ namespace MetroRetro
         static public Brush AdditionalColor;
         static public Brush BackgroundColor;
         static public Brush ObstaclesColor;
+        static public Color4 BackgroundColorNormal = Colors.Black;
         public static void CreateColors(DeviceManager deviceManager)
         {
             PlayerColor = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.Green);

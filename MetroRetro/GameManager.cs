@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using CommonDX;
+using MetroRetro.Games;
+using SharpDX.Direct2D1;
 
-namespace MetroRetro.Games
+namespace MetroRetro
 {
     public class GameManager
     {
@@ -48,7 +46,16 @@ namespace MetroRetro.Games
             if (_currentGame == null)
                 return;
 
-            _currentGame.Update(dt, target, deviceManager);
+            var screenSize = new Point((float)target.RenderTargetBounds.Width, (float)target.RenderTargetBounds.Height);
+
+            var context2D = target.DeviceManager.ContextDirect2D;
+            context2D.BeginDraw();
+            context2D.Clear(BaseGame.BackgroundColorNormal);
+            context2D.TextAntialiasMode = TextAntialiasMode.Grayscale;
+
+            _currentGame.Update(dt, screenSize, context2D, target);
+
+            context2D.EndDraw();
         }
 
         public void StartFirstGame()
@@ -78,5 +85,17 @@ namespace MetroRetro.Games
         Released,
         Over,
         Out
+    }
+
+    public class Point
+    {
+        public Point(float x, float y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public float X { get; set; }
+        public float Y { get; set; }
     }
 }
