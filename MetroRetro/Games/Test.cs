@@ -11,26 +11,25 @@ using Matrix = SharpDX.Matrix;
 
 namespace MetroRetro.Games
 {
-    class Test : IGame
+    class Test : BaseGame
     {
         private GameManager _gameManager;
 
-        public Test(GameManager gameManager)
-        {
-            _gameManager = gameManager;
-        }
-
-        public void NewGame()
+        public Test(GameManager gameManager) : base(gameManager)
         {
         }
 
-        public void EndGame()
+        public override void NewGame()
+        {
+        }
+
+        public override void EndGame()
         {
         }
         
         private TextFormat _textFormat;
         private PathGeometry1 _pathGeometry1;
-        public void Update(long dt, TargetBase target, DeviceManager deviceManager)
+        public override void Update(long dt, TargetBase target, DeviceManager deviceManager)
         {
             Brush sceneColorBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White);
 
@@ -96,11 +95,11 @@ namespace MetroRetro.Games
             context2D.EndDraw();
         }
 
-        public void KeyPressed(InputType key)
+        public override void KeyPressed(InputType key)
         {
         }
 
-        public void KeyReleased(InputType key)
+        public override void KeyReleased(InputType key)
         {
         }
     }

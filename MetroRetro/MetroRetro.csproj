@@ -116,7 +116,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Games\Test.cs" />
-    <Compile Include="IGame.cs" />
+    <Compile Include="BaseGame.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="Games\Pong.cs" />
     <Compile Include="MainPage.xaml.cs">

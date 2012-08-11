@@ -11,30 +11,27 @@ using Matrix = SharpDX.DirectWrite.Matrix;
 
 namespace MetroRetro.Games
 {
-    class Pong : IGame
+    class Pong : BaseGame
     {
         private GameManager _gameManager;
 
-        public Pong(GameManager gameManager)
-        {
-            _gameManager = gameManager;
-        }
-
-        public void NewGame()
+        public Pong(GameManager gameManager) : base(gameManager)
         {
         }
 
-        public void EndGame()
+        public override void NewGame()
+        {
+        }
+
+        public override void EndGame()
         {
         }
         
         private TextFormat _textFormat;
         private PathGeometry1 _pathGeometry1;
 
-        public void Update(long dt, TargetBase target, DeviceManager deviceManager)
+        public override void Update(long dt, TargetBase target, DeviceManager deviceManager)
         {
-            Brush sceneColorBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White);
-
             var context2D = target.DeviceManager.ContextDirect2D;
 
             context2D.BeginDraw();
@@ -87,23 +84,23 @@ namespace MetroRetro.Games
 
             context2D.Transform = SharpDX.Matrix.RotationZ((float)(Math.Cos(t * 2.0f * Math.PI * 0.5f))) * SharpDX.Matrix.Translation(centerX, centerY, 0);
 
-            context2D.DrawText("SharpDX\nDirect2D1\nDirectWrite", _textFormat, new RectangleF(-sizeX / 2.0f, -sizeY / 2.0f, +sizeX/2.0f, sizeY/2.0f), sceneColorBrush);
+            context2D.DrawText("SharpDX\nDirect2D1\nDirectWrite", _textFormat, new RectangleF(-sizeX / 2.0f, -sizeY / 2.0f, +sizeX/2.0f, sizeY/2.0f), ObstaclesColor);
 
             float scaling = (float)(Math.Cos(t * 2.0 * Math.PI * 0.25) * 0.5f + 0.5f) * 0.5f + 0.5f;
             context2D.Transform = SharpDX.Matrix.Scaling(scaling) * SharpDX.Matrix.RotationZ(t * 1.5f) * SharpDX.Matrix.Translation(centerX, centerY, 0);
 
-            context2D.DrawGeometry(_pathGeometry1, sceneColorBrush, 2.0f);
+            context2D.DrawGeometry(_pathGeometry1, PlayerColor, 2.0f);
 
 
-            context2D.DrawRectangle(new RectangleF(10, 10, 200, 200), sceneColorBrush );
+            context2D.FillRectangle(new RectangleF(10, 10, 200, 200), EnemyColor );
             context2D.EndDraw();
         }
 
-        public void KeyPressed(InputType key)
+        public override void KeyPressed(InputType key)
         {
         }
 
-        public void KeyReleased(InputType key)
+        public override void KeyReleased(InputType key)
         {
         }
     }

@@ -12,15 +12,15 @@ namespace MetroRetro.Games
         public MainPage Page { get; set; }
         public Renderer Renderer { get; set; }
 
-        private Dictionary<GameType, IGame> _games;
-        private IGame _currentGame;
+        private Dictionary<GameType, BaseGame> _games;
+        private BaseGame _currentGame;
 
         public void Create(MainPage mainPage, Renderer renderer)
         {
             Page = mainPage;
             Renderer = renderer;
 
-            _games = new Dictionary<GameType, IGame>
+            _games = new Dictionary<GameType, BaseGame>
                          {
                              {GameType.Test, new Test(this)},
                              {GameType.Pong, new Pong(this)}
