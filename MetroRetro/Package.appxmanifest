@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+  <Identity Name="9a2afdc0-2fd4-40ca-8efa-20df7d52ebac" Publisher="CN=Marek" Version="1.0.0.0" />
+  <Properties>
+    <DisplayName>Metro Retro</DisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+    <Description>MetroRetro</Description>
+    <PublisherDisplayName>Marek</PublisherDisplayName>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.2</OSMinVersion>
+    <OSMaxVersionTested>6.2</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="MetroRetro.App">
+      <VisualElements DisplayName="MetroRetro" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Metro Retro" ForegroundText="light" BackgroundColor="#222222">
+        <DefaultTile ShowName="allLogos" />
+        <SplashScreen Image="Assets\SplashScreen.png" />
+        <InitialRotationPreference>
+          <Rotation Preference="landscape" />
+        </InitialRotationPreference>
+      </VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>
