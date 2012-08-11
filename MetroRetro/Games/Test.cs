@@ -29,7 +29,7 @@ namespace MetroRetro.Games
         
         private TextFormat _textFormat;
         private PathGeometry1 _pathGeometry1;
-        public override void Update(long dt, Point screenSize, DeviceContext context, TargetBase target)
+        public override void Update(DeviceContext context, TargetBase target, Point screenSize, float dt, float elapsedTime)
         {
             var centerX = screenSize.X / 2;
             var centerY = screenSize.Y / 2;
@@ -69,7 +69,7 @@ namespace MetroRetro.Games
             }
 
             context.TextAntialiasMode = TextAntialiasMode.Grayscale;
-            var t = dt / 1000.0f;
+            var t = elapsedTime;
 
             context.Transform = Matrix.RotationZ((float)(Math.Cos(t * 2.0f * Math.PI * 0.5f))) * Matrix.Translation(centerX, centerY, 0);
 

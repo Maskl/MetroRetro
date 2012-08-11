@@ -26,5 +26,25 @@ namespace MetroRetro
             rectangle.Bottom *= Y;
             return rectangle;
         }
+
+        public Point Add(Point point)
+        {
+            return new Point(X + point.X, Y + point.Y);
+        }
+
+        public Point Add(float v)
+        {
+            return new Point(X +v, Y + v);
+        }
+
+        public Point Mul(Point point)
+        {
+            return new Point(X * point.X, Y * point.Y);
+        }
+
+        public Point Mul(float v)
+        {
+            return new Point(X * v, Y * v);
+        }
     }
 }

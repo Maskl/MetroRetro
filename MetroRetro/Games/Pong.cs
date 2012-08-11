@@ -18,23 +18,32 @@ namespace MetroRetro.Games
         {
         }
 
-        private Point _player;
-        private Point _enemy;
+        private Point _playerPos;
+        private Point _playerDir;
+
+        private Point _enemyPos;
+
+        private float _playerSpeed = 0.8f;
+        private float _enemySpeed = 0.01f;
+        private float _ballSpeed = 0.01f;
 
         public override void NewGame()
         {
-            _player = new Point(0.05f, 0.5f);
-            _enemy  = new Point(0.95f, 0.5f);
+            _playerPos = new Point(0.05f, 0.5f);
+            _enemyPos  = new Point(0.95f, 0.5f);
+            _playerDir = new Point(0.0f, 0.0f);
         }
 
         public override void EndGame()
         {
         }
 
-        public override void Update(long dt, Point screenSize, DeviceContext context, TargetBase target)
+        public override void Update(DeviceContext context, TargetBase target, Point screenSize, float dt, float elapsedTime)
         {
-            var playerBox = _player.ToBox(new Point(0.05f, 0.3f));
-            var enemyBox = _enemy.ToBox(new Point(0.05f, 0.3f));
+            _playerPos = _playerPos.Add(_playerDir.Mul(dt));
+
+            var playerBox = _playerPos.ToBox(new Point(0.05f, 0.3f));
+            var enemyBox = _enemyPos.ToBox(new Point(0.05f, 0.3f));
 
             context.FillRectangle(screenSize.ApplyTo(playerBox), GameColors.PlayerColor);
             context.FillRectangle(screenSize.ApplyTo(enemyBox), GameColors.EnemyColor);
@@ -42,10 +51,30 @@ namespace MetroRetro.Games
 
         public override void KeyPressed(InputType key)
         {
+            switch (key)
+            {
+                case InputType.Up:
+                    _playerDir = new Point(0, -_playerSpeed);
+                    break;
+
+                case InputType.Down:
+                    _playerDir = new Point(0, _playerSpeed);
+                    break;
+            }
         }
 
         public override void KeyReleased(InputType key)
         {
+            switch (key)
+            {
+                case InputType.Up:
+                    _playerDir = new Point(0, 0);
+                    break;
+
+                case InputType.Down:
+                    _playerDir = new Point(0, 0);
+                    break;
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace MetroRetro
 
         public abstract void NewGame();
         public abstract void EndGame();
-        public abstract void Update(long dt, Point screenSize, DeviceContext context, TargetBase target);
+        public abstract void Update(DeviceContext context, TargetBase target, Point screenSize, float dt, float elapsedTime);
         public abstract void KeyPressed(InputType key);
         public abstract void KeyReleased(InputType key);
     }

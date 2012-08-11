@@ -29,7 +29,14 @@ namespace MetroRetro
 
         public void HandleInput(InputType inputType, InputState state)
         {
-            Page.AddDebugText(inputType + " " + state);
+            if (_currentGame == null)
+                return;
+
+            if (state == InputState.Pressed)
+                _currentGame.KeyPressed(inputType);
+
+            if (state == InputState.Released)
+                _currentGame.KeyReleased(inputType);
         }
 
         public void Start(GameType game)
@@ -41,7 +48,8 @@ namespace MetroRetro
             _currentGame.NewGame();
         }
 
-        public void Update(long dt, TargetBase target, DeviceManager deviceManager)
+        private float oldElapsedTimeF;
+        public void Update(long elapsedTime, TargetBase target, DeviceManager deviceManager)
         {
             if (_currentGame == null)
                 return;
@@ -53,14 +61,17 @@ namespace MetroRetro
             context2D.Clear(GameColors.BackgroundColorNormal);
             context2D.TextAntialiasMode = TextAntialiasMode.Grayscale;
 
-            _currentGame.Update(dt, screenSize, context2D, target);
+            var elapsedTimeF = elapsedTime / 1000.0f;
+            var dt = elapsedTimeF - oldElapsedTimeF;
+            oldElapsedTimeF = elapsedTimeF;
+            _currentGame.Update(context2D, target, screenSize, dt, elapsedTime);
 
             context2D.EndDraw();
         }
 
         public void StartFirstGame()
         {
-            Start(GameType.Test);
+            Start(GameType.Pong);
         }
     }
 
