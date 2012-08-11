@@ -37,8 +37,12 @@ namespace MetroRetro.Games
 
         public override void NewGame()
         {
-            _playerPos = new Point(GamesParams.MarginX0, 0.5f);
-            _enemyPos = new Point(GamesParams.MarginX1, 0.5f);
+            _playerPos = new Point(GamesParams.MarginX0, 0.5f).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
+                                                                     GamesParams.Margin1.Sub(_padSize.Half()));
+
+            _enemyPos = new Point(GamesParams.MarginX1, 0.5f).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
+                                                                    GamesParams.Margin1.Sub(_padSize.Half()));
+
             _ballPos = new Point(0.5f, 0.5f);
 
             _playerSpd = 0.8f;
@@ -47,7 +51,7 @@ namespace MetroRetro.Games
 
             _playerDir = new Point(0.0f, 0.0f);
             _enemyDir = new Point(0.0f, 0.0f);
-            _ballDir = new Point(-1, 0.0f);
+            _ballDir = new Point(1.0f, 0.0f);
         }
 
         public override void EndGame()

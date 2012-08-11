@@ -13,6 +13,11 @@ namespace MetroRetro
             _gameManager = gameManager;
         }
 
+        protected void Debug(string text)
+        {
+            _gameManager.Page.AddDebugText(text);
+        }
+
         public abstract void NewGame();
         public abstract void EndGame();
         public abstract void Update(DeviceContext context, TargetBase target, Point screenSize, float dt, float elapsedTime);
