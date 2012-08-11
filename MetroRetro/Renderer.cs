@@ -27,6 +27,7 @@ namespace MetroRetro
         {
             _deviceManager = deviceManager;
             _clock = Stopwatch.StartNew();
+            _clock.Stop();
         }
 
         public virtual void Render(TargetBase target)

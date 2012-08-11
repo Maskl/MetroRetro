@@ -84,7 +84,7 @@ namespace MetroRetro
             _gameManager.Create(_mainPage, _renderer);
 
             // And start first game
-            _gameManager.StartFirstGame();
+            _gameManager.StartSession();
         }
 
         void DisplayPropertiesLogicalDpiChanged(object sender)

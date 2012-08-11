@@ -34,7 +34,7 @@ namespace MetroRetro
                                         {InputType.Down, DownArrowButton},
                                         {InputType.Left, LeftArrowButton},
                                         {InputType.Right, RightArrowButton},
-                                        {InputType.Next, NextButton}
+                                        {InputType.Pause, MenuButton}
                                     };
 
             _buttonsLastColors = new Dictionary<Border, Color>
@@ -44,7 +44,7 @@ namespace MetroRetro
                                         {DownArrowButton, Colors.White},
                                         {LeftArrowButton, Colors.White},
                                         {RightArrowButton, Colors.White},
-                                        {NextButton, Colors.White}
+                                        {MenuButton, Colors.White}
                                     };
 
             _gameManager = gameManager;
@@ -160,12 +160,10 @@ namespace MetroRetro
                 case VirtualKey.D:
                     return InputType.Right;
 
-                case VirtualKey.F3:
-                case VirtualKey.N:
-                    return InputType.Next;
-
                 case VirtualKey.Pause:
+                case VirtualKey.Menu:
                 case VirtualKey.P:
+                case VirtualKey.M:
                     return InputType.Pause;
             }
 
@@ -181,6 +179,11 @@ namespace MetroRetro
                 _debugTexts.RemoveAt(0);
 
             DebugText.Text = _debugTexts.Aggregate("", (current, debugText) => current + (debugText + "\n"));
+        }
+
+        public void SetPointsText(string text)
+        {
+            PointsText.Text = text;
         }
     }
 }

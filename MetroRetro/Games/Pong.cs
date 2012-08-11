@@ -90,6 +90,8 @@ namespace MetroRetro.Games
                 _ballDir = _ballDir.Normalise();
 
                 _ballSpd += _ballSpdInc;
+
+                _gameManager.AddPoints(100);
             }
 
             // Ball collision with enemy pad
@@ -134,7 +136,7 @@ namespace MetroRetro.Games
 
         protected void DrawBoardBorder(DeviceContext context, Point screenSize)
         {
-            context.DrawRectangle(screenSize.ApplyTo(GamesParams.Margin0.ToRectangleWith(GamesParams.Margin1)), GamesParams.ObstaclesColor, 5);
+            context.DrawRectangle(screenSize.ApplyTo(GamesParams.Margin0.ToRectangleWith(GamesParams.Margin1)), GamesParams.ObstaclesColor, 2);
         }
 
         public override void KeyPressed(InputType key)

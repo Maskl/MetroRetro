@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using CommonDX;
 using MetroRetro.Games;
 using SharpDX.Direct2D1;
@@ -12,6 +13,10 @@ namespace MetroRetro
         public MainPage Page { get; set; }
         public Renderer Renderer { get; set; }
         public bool IsPause { get; set; }
+        public bool IsTraining { get; set; }
+
+        public int Points { get; set; }
+        public int Lifes { get; set; }
 
         private Dictionary<GameType, BaseGame> _games;
         private BaseGame _currentGame;
@@ -46,7 +51,7 @@ namespace MetroRetro
 
                 if (key == InputType.Pause)
                 {
-                    TogglePause();
+                    TogglePause(true);
                     return;
                 }
             }
@@ -65,6 +70,8 @@ namespace MetroRetro
 
             _currentGame = _games[game];
             _currentGame.NewGame();
+
+            RedrawPointsAndLifes();
         }
 
         private float _oldElapsedTimeF;
@@ -88,49 +95,140 @@ namespace MetroRetro
             context2D.EndDraw();
         }
 
-        public void TogglePause()
+        public void TogglePause(bool showDialog)
         {
-            IsPause = !IsPause;
+            if (IsPause)
+                Unpause();
+            else
+                Pause(showDialog);
+        }
 
-            if (!IsPause)
-            {
-                Renderer.Unpause();
+        public void Pause(bool showDialog)
+        {
+            if (IsPause)
                 return;
-            }
+            
+            IsPause = true;
 
             Renderer.Pause();
-            ShowPauseDialog();
+            if (showDialog)
+                ShowPauseDialog();
+        }
+
+        public void Unpause()
+        {
+            if (!IsPause)
+                return;
+
+            IsPause = false;
+            Renderer.Unpause();
         }
 
         private async void ShowPauseDialog()
         {
-            var dialog = new MessageDialog("Paused. Click button below to play.", "Pause");
+            var dialog = new MessageDialog("Click one of the buttons below.", "Pause");
 
             var ans = 0;
-            var cmd1 = new UICommand("Next game", cmd => ans = 1, 1);
-            var cmd2 = new UICommand("Resume", cmd => ans = 2, 2);
+            var cmd1 = new UICommand("Resume", cmd => ans = 1, 1);
+            var cmd2 = new UICommand("Next game", cmd => ans = 2, 2);
+            var cmd3 = new UICommand("Back to menu", cmd => ans = 3, 3);
 
             dialog.Commands.Add(cmd1);
             dialog.Commands.Add(cmd2);
-            dialog.DefaultCommandIndex = 1;
+            dialog.Commands.Add(cmd3);
+            dialog.DefaultCommandIndex = 0;
+
+            await dialog.ShowAsync();
+            
+            if (ans == 1)
+                Unpause();
+
+            if (ans == 2)
+                StartNextGame();
+
+            if (ans == 3)
+                EndSession();
+        }
+
+        public async void EndSession()
+        {
+            Pause(false);
+
+            var text = "Your result: 56411 points\nYOUR RECORD!";
+            var dialog = new MessageDialog(text, "End of the game");
+
+            var ans = 0;
+            var cmd1 = new UICommand("Back to menu", cmd => ans = 1, 1);
+
+            dialog.Commands.Add(cmd1);
+            dialog.DefaultCommandIndex = 0;
 
             await dialog.ShowAsync();
 
-            TogglePause();
-            
             if (ans == 1)
-                StartNextGame();
+                StartSession();
         }
 
-        public void StartFirstGame()
+        public async void StartSession()
         {
+            Pause(false);
+            var dialog = new MessageDialog("Tap one of the buttons below.\n" +
+                                           "In training mode you will need to change game manually (Button on the top)", "Hi!");
+
+            var ans = 0;
+            var cmd1 = new UICommand("Training", cmd => ans = 1, 1);
+            var cmd2 = new UICommand("Fast game", cmd => ans = 2, 2);
+
+            dialog.Commands.Add(cmd1);
+            dialog.Commands.Add(cmd2);
+            dialog.DefaultCommandIndex = 0;
+
+            await dialog.ShowAsync();
+
+            IsTraining = ans == 1;
+                
             Start(GameType.Pong);
+            Unpause();
+
+            Points = 0;
+            Lifes = 3;
         }
 
         public void StartNextGame()
         {
+            Pause(false);
             var rand = new Random();
-            Start( (GameType) rand.Next((int)GameType.GamesCount) );
+            Start((GameType)rand.Next((int)GameType.GamesCount));
+            Unpause();
+        }
+
+        public void AddPoints(int points)
+        {
+            Points += points;
+            RedrawPointsAndLifes();
+        }
+
+        public void Dead(int points)
+        {
+            if (--Lifes <= 0)
+            {
+                EndSession();
+            }
+            else
+            {
+                RedrawPointsAndLifes();
+                StartNextGame();
+            }
+        }
+
+        private void RedrawPointsAndLifes()
+        {
+            var text = Points.ToString(new NumberFormatInfo {NumberDecimalDigits = 8});
+            text += " ";
+            for (var i = 0; i < Lifes; i++)
+                text += "❤";
+
+            Page.SetPointsText(text);
         }
     }
 

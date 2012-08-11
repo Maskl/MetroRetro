@@ -158,14 +158,14 @@
 
     <!-- Next button -->
     <Grid
-        x:Name="NextContainer"
-        Height="40"
-        Width="110"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Bottom"
-        Margin="10,0,1246,10">
+        x:Name="MenuContainer"
+        Height="50"
+        Width="100"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Margin="50,50,0,0" Opacity="0.5">
         <Border
-            x:Name="NextButton"
+            x:Name="MenuButton"
             Grid.Row="0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -179,9 +179,9 @@
             PointerEntered="InputButtonPointerOver"
             PointerExited="InputButtonPointerOut">
             <TextBlock
-                Text="next"
+                Text="menu"
                 FontFamily="Segoe UI"
-                FontSize="18.667"
+                FontSize="21.333"
                 Foreground="Black"
                 TextAlignment="Center"
                 HorizontalAlignment="Center"
@@ -192,27 +192,38 @@
     <!-- Points text -->
     <TextBlock
         x:Name="PointsText"
-        Text="00012515"
-        Width="248"
-        Height="44"
+        Text="152600"
+        Width="250"
+        Height="50"
         HorizontalAlignment="Right"
         VerticalAlignment="Top"
         Margin="0,50,50,0"
         TextWrapping="Wrap"
         FontFamily="Segoe UI"
         TextAlignment="Right"
-        FontSize="29.333" Canvas.ZIndex="1" IsHitTestVisible="False" Opacity="0.5" Foreground="#FF888888" />
+        FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Opacity="0.5" Foreground="Blue" />
 
     <!-- Debug text -->
     <TextBlock
         x:Name="DebugText"
         Text="ok"
         Width="700"
-        Height="400"
-        Margin="50,50,0,0"
+        Height="294"
+        Margin="50,424,0,0"
         HorizontalAlignment="Left"
         TextWrapping="Wrap"
         VerticalAlignment="Top"
         FontSize="21.333" Foreground="#FFF1C54E" />
+    <TextBlock
+    	x:Name="PointsText_Copy"
+    	Text="❤❤❤"
+    	Width="250"
+    	Height="50"
+    	HorizontalAlignment="Left"
+    	VerticalAlignment="Top"
+    	Margin="160,50,0,0"
+    	TextWrapping="Wrap"
+    	FontFamily="Segoe UI"
+    	FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Opacity="0.5" Foreground="Red" />
 
 </SwapChainBackgroundPanel>

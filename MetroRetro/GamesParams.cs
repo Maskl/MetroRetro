@@ -5,7 +5,7 @@ namespace MetroRetro
 {
     static public class GamesParams
     {
-        public static float Margin = 0.05f;
+        public static float Margin = 0.125f;
         public static float MarginX0 = Margin;
         public static float MarginX1 = 1 - Margin;
         public static float MarginY0 = Margin;
