@@ -115,6 +115,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameColors.cs" />
     <Compile Include="Games\Test.cs" />
     <Compile Include="BaseGame.cs" />
     <Compile Include="GameManager.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderer.cs" />
   </ItemGroup>

@@ -77,7 +77,8 @@ namespace MetroRetro
             // Callback on DpiChanged
             DisplayProperties.LogicalDpiChanged += DisplayPropertiesLogicalDpiChanged;
 
-            BaseGame.CreateColors(_deviceManager);
+            // Create colors which will be use in all games.
+            GameColors.CreateColors(_deviceManager);
             
             // Create Game Manager
             _gameManager.Create(_mainPage, _renderer);

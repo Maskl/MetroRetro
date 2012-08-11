@@ -18,12 +18,13 @@ namespace MetroRetro.Games
         {
         }
 
-        private int _playerY;
-        private int _enemyY;
+        private Point _player;
+        private Point _enemy;
+
         public override void NewGame()
         {
-            _playerY = 300;
-            _enemyY = 300;
+            _player = new Point(0.05f, 0.5f);
+            _enemy  = new Point(0.95f, 0.5f);
         }
 
         public override void EndGame()
@@ -32,7 +33,11 @@ namespace MetroRetro.Games
 
         public override void Update(long dt, Point screenSize, DeviceContext context, TargetBase target)
         {
-            context.FillRectangle(new RectangleF(10, 10, screenSize.X / 3, screenSize.Y / 3), EnemyColor);
+            var playerBox = _player.ToBox(new Point(0.05f, 0.3f));
+            var enemyBox = _enemy.ToBox(new Point(0.05f, 0.3f));
+
+            context.FillRectangle(screenSize.ApplyTo(playerBox), GameColors.PlayerColor);
+            context.FillRectangle(screenSize.ApplyTo(enemyBox), GameColors.EnemyColor);
         }
 
         public override void KeyPressed(InputType key)

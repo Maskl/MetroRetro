@@ -50,7 +50,7 @@ namespace MetroRetro
 
             var context2D = target.DeviceManager.ContextDirect2D;
             context2D.BeginDraw();
-            context2D.Clear(BaseGame.BackgroundColorNormal);
+            context2D.Clear(GameColors.BackgroundColorNormal);
             context2D.TextAntialiasMode = TextAntialiasMode.Grayscale;
 
             _currentGame.Update(dt, screenSize, context2D, target);
@@ -60,7 +60,7 @@ namespace MetroRetro
 
         public void StartFirstGame()
         {
-            Start(GameType.Pong);
+            Start(GameType.Test);
         }
     }
 
@@ -85,17 +85,5 @@ namespace MetroRetro
         Released,
         Over,
         Out
-    }
-
-    public class Point
-    {
-        public Point(float x, float y)
-        {
-            X = x;
-            Y = y;
-        }
-
-        public float X { get; set; }
-        public float Y { get; set; }
     }
 }
