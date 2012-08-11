@@ -83,8 +83,10 @@ namespace MetroRetro
         // Pass input event to GameManager
         private void HandleInput(InputType inputType, InputState state)
         {
-            ButtonPressedOrReleased(_buttonsDictionary[inputType], state);
             _gameManager.HandleInput(inputType, state);
+
+            if (_buttonsDictionary.ContainsKey(inputType))
+                ButtonPressedOrReleased(_buttonsDictionary[inputType], state);
         }
 
         // Input methods:
@@ -161,6 +163,10 @@ namespace MetroRetro
                 case VirtualKey.F3:
                 case VirtualKey.N:
                     return InputType.Next;
+
+                case VirtualKey.Pause:
+                case VirtualKey.P:
+                    return InputType.Pause;
             }
 
             return null;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CommonDX;
 using MetroRetro.Games;
 using SharpDX.Direct2D1;
+using Windows.UI.Popups;
 
 namespace MetroRetro
 {
@@ -10,6 +11,7 @@ namespace MetroRetro
     {
         public MainPage Page { get; set; }
         public Renderer Renderer { get; set; }
+        public bool IsPause { get; set; }
 
         private Dictionary<GameType, BaseGame> _games;
         private BaseGame _currentGame;
@@ -18,6 +20,7 @@ namespace MetroRetro
         {
             Page = mainPage;
             Renderer = renderer;
+            IsPause = false;
 
             _games = new Dictionary<GameType, BaseGame>
                          {
@@ -33,10 +36,19 @@ namespace MetroRetro
             if (_currentGame == null)
                 return;
 
-            if (state == InputState.Released && key == InputType.Next)
+            if (state == InputState.Released)
             {
-                StartNextGame();
-                return;
+                if (key == InputType.Next)
+                {
+                    StartNextGame();
+                    return;
+                }
+
+                if (key == InputType.Pause)
+                {
+                    TogglePause();
+                    return;
+                }
             }
 
             if (state == InputState.Pressed)
@@ -58,7 +70,7 @@ namespace MetroRetro
         private float _oldElapsedTimeF;
         public void Update(long elapsedTime, TargetBase target, DeviceManager deviceManager)
         {
-            if (_currentGame == null)
+            if (_currentGame == null || IsPause)
                 return;
 
             var screenSize = new Point((float)target.RenderTargetBounds.Width, (float)target.RenderTargetBounds.Height);
@@ -66,7 +78,7 @@ namespace MetroRetro
             var context2D = target.DeviceManager.ContextDirect2D;
             context2D.BeginDraw();
             context2D.Clear(GamesParams.BackgroundColorNormal);
-            context2D.TextAntialiasMode = TextAntialiasMode.Grayscale;
+         //   context2D.TextAntialiasMode = TextAntialiasMode.Grayscale;
 
             var elapsedTimeF = elapsedTime / 1000.0f;
             var dt = elapsedTimeF - _oldElapsedTimeF;
@@ -74,6 +86,40 @@ namespace MetroRetro
             _currentGame.Update(context2D, target, screenSize, dt, elapsedTimeF);
 
             context2D.EndDraw();
+        }
+
+        public void TogglePause()
+        {
+            IsPause = !IsPause;
+
+            if (!IsPause)
+            {
+                Renderer.Unpause();
+                return;
+            }
+
+            Renderer.Pause();
+            ShowPauseDialog();
+        }
+
+        private async void ShowPauseDialog()
+        {
+            var dialog = new MessageDialog("Paused. Click button below to play.", "Pause");
+
+            var ans = 0;
+            var cmd1 = new UICommand("Next game", cmd => ans = 1, 1);
+            var cmd2 = new UICommand("Resume", cmd => ans = 2, 2);
+
+            dialog.Commands.Add(cmd1);
+            dialog.Commands.Add(cmd2);
+            dialog.DefaultCommandIndex = 1;
+
+            await dialog.ShowAsync();
+
+            TogglePause();
+            
+            if (ans == 1)
+                StartNextGame();
         }
 
         public void StartFirstGame()
@@ -102,7 +148,9 @@ namespace MetroRetro
         Left,
         Right,
         Space,
-        Next
+        Next,
+        Pause,
+        Unpause
     }
 
     public enum InputState

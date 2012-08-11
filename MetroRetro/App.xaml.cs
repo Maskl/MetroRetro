@@ -94,6 +94,9 @@ namespace MetroRetro
 
         void CompositionTargetRendering(object sender, object e)
         {
+            if (_gameManager.IsPause)
+                return;
+
             _target.RenderAll();
             _target.Present();
         }

@@ -36,5 +36,15 @@ namespace MetroRetro
 
             _gameManager.Update(_clock.ElapsedMilliseconds, target, _deviceManager);
         }
+
+        public void Pause()
+        {
+            _clock.Stop();
+        }
+
+        public void Unpause()
+        {
+            _clock.Start();
+        }
     }
 }
