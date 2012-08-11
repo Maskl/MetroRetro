@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -49,5 +50,70 @@ namespace MetroRetro
         {
             //throw new NotImplementedException();
         }
+
+        public void ButtonPressedOrReleased(Border button, bool pressed)
+        {
+            var background = pressed ? Colors.Yellow : Colors.White;
+            var foreground = pressed ? Colors.Blue   : Colors.Black;
+
+            button.Background = new SolidColorBrush(background);
+            button.BorderBrush = new SolidColorBrush(foreground);
+        }
+
+        public void HandleInput(PossibleInputTypes inputType, bool pressed)
+        {
+            DebugText.Text = inputType.ToString() + " " + pressed;
+        }
+
+        private void SpaceButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            ButtonPressedOrReleased(sender as Border, true);
+            HandleInput(PossibleInputTypes.Space, true);
+        }
+
+        private void SpaceButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            ButtonPressedOrReleased(sender as Border, false);
+            HandleInput(PossibleInputTypes.Space, false);
+        }
+
+        private void UpArrowButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+        	// TODO: Add event handler implementation here.
+        }
+
+        private void UpArrowButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+        	// TODO: Add event handler implementation here.
+        }
+
+        private void LeftArrowButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+        	// TODO: Add event handler implementation here.
+        }
+
+        private void LeftArrowButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+        	// TODO: Add event handler implementation here.
+        }
+
+        private void RightArrowButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+        	// TODO: Add event handler implementation here.
+        }
+
+        private void RightArrowButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+        	// TODO: Add event handler implementation here.
+        }
+    }
+
+    public enum PossibleInputTypes
+    {
+        Up,
+        Down,
+        Left,
+        Right,
+        Space
     }
 }

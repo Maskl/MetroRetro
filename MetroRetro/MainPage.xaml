@@ -35,7 +35,7 @@
             BorderBrush="Black"
             Foreground="Black"
             FontSize="32"
-            FontWeight="Bold" />
+            FontWeight="Bold" PointerPressed="UpArrowButton_PointerPressed" PointerReleased="UpArrowButton_PointerReleased" />
         <Button
             x:Name="DownArrowButton"
             Content="↓"
@@ -61,7 +61,7 @@
             BorderBrush="Black"
             Foreground="Black"
             FontSize="32"
-            FontWeight="Bold" />
+            FontWeight="Bold" PointerPressed="LeftArrowButton_PointerPressed" PointerReleased="LeftArrowButton_PointerReleased" />
         <Button
             x:Name="RightArrowButton"
             Content="→"
@@ -74,7 +74,7 @@
             BorderBrush="Black"
             Foreground="Black"
             FontSize="32"
-            FontWeight="Bold" />
+            FontWeight="Bold" PointerPressed="RightArrowButton_PointerPressed" PointerReleased="RightArrowButton_PointerReleased" />
     </Grid>
 
     <!-- Space button -->
@@ -85,19 +85,27 @@
         HorizontalAlignment="Center"
         VerticalAlignment="Bottom"
         Margin="0,0,300,50">
-        <Button
+        <Border
             x:Name="SpaceButton"
-            Content="Shoot"
             Grid.Row="0"
             Margin="5"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Background="White"
             BorderBrush="Black"
-            Foreground="Black"
-            FontSize="32"
-            FontWeight="Bold"
-            Padding="0" />
+            BorderThickness="2"
+            Padding="0"
+            PointerPressed="SpaceButton_PointerPressed"
+            PointerReleased="SpaceButton_PointerReleased">
+            <TextBlock
+                Text="shoot"
+                FontFamily="Segoe UI"
+                FontSize="32"
+                Foreground="Black"
+                TextAlignment="Center"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" />
+        </Border>
     </Grid>
     
     <!-- Points text -->
