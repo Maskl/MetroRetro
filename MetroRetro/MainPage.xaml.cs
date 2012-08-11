@@ -1,23 +1,4 @@
-﻿// Copyright (c) 2010-2012 SharpDX - Alexandre Mutel
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,30 +14,61 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace MetroRetro
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MainPage : SwapChainBackgroundPanel
+    public sealed partial class MainPage
     {
-
-
-        public Dictionary<PossibleInputTypes, Border> ButtonsDictionary;
+        public Dictionary<InputType, Border> ButtonsDictionary;
+        public Dictionary<Border, Color> ButtonsLastColors;
 
         public MainPage()
         {
             InitializeComponent();
 
-            ButtonsDictionary = new Dictionary<PossibleInputTypes, Border> {{PossibleInputTypes.Space, SpaceButton}};
+            ButtonsDictionary = new Dictionary<InputType, Border>
+                                    {
+                                        {InputType.Space, SpaceButton},
+                                        {InputType.Up, UpArrowButton},
+                                        {InputType.Down, DownArrowButton},
+                                        {InputType.Left, LeftArrowButton},
+                                        {InputType.Right, RightArrowButton}
+                                    };
+
+            ButtonsLastColors = new Dictionary<Border, Color>
+                                    {
+                                        {SpaceButton, Colors.White},
+                                        {UpArrowButton, Colors.White},
+                                        {DownArrowButton, Colors.White},
+                                        {LeftArrowButton, Colors.White},
+                                        {RightArrowButton, Colors.White}
+                                    };
         }
 
-        public void ButtonPressedOrReleased(Border button, bool pressed)
+        public void ButtonPressedOrReleased(Border button, InputState state)
         {
-            var background = pressed ? Colors.Yellow : Colors.White;
-            var foreground = pressed ? Colors.Blue   : Colors.Black;
+            var background = Colors.White;
+            var foreground = Colors.Black;
+            switch (state)
+            {
+                case InputState.Pressed:
+                    background = Colors.Green;
+                break;
+
+                case InputState.Released:
+                    background = ButtonsLastColors[button];
+                break;
+
+                case InputState.Over:
+                    background = Colors.Yellow;
+                    ButtonsLastColors[button] = background;
+                break;
+
+                case InputState.Out:
+                    background = Colors.White;
+                    ButtonsLastColors[button] = background;
+                break;
+            }
+
 
             button.Background = new SolidColorBrush(background);
             button.BorderBrush = new SolidColorBrush(foreground);
@@ -72,81 +84,55 @@ namespace MetroRetro
             DebugText.Text = _debugTexts.Aggregate("", (current, debugText) => current + (debugText + "\n"));
         }
 
-        public void HandleInput(PossibleInputTypes inputType, bool pressed)
+        public void HandleInput(InputType inputType, InputState state)
         {
-            ButtonPressedOrReleased(ButtonsDictionary[inputType], pressed);
-            AddDebugText(inputType + " " + pressed);
+            ButtonPressedOrReleased(ButtonsDictionary[inputType], state);
+            AddDebugText(inputType + " " + state);
         }
 
-        private void SpaceButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void InputButtonPointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            HandleInput(PossibleInputTypes.Space, true);
+            var inputType = ButtonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
+            HandleInput(inputType, InputState.Pressed);
         }
 
-        private void SpaceButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void InputButtonPointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            HandleInput(PossibleInputTypes.Space, false);
+            var inputType = ButtonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
+            HandleInput(inputType, InputState.Released);
         }
 
-        private void UpArrowButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void InputButtonPointerOver(object sender, PointerRoutedEventArgs e)
         {
-        	// TODO: Add event handler implementation here.
+            var inputType = ButtonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
+            HandleInput(inputType, InputState.Over);
         }
 
-        private void UpArrowButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void InputButtonPointerOut(object sender, PointerRoutedEventArgs e)
         {
-        	// TODO: Add event handler implementation here.
+            var inputType = ButtonsDictionary.FirstOrDefault(x => x.Value == sender as Border).Key;
+            HandleInput(inputType, InputState.Out);
         }
 
-        private void DownArrowButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            // TODO: Add event handler implementation here.
-        }
-
-        private void DownArrowButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            // TODO: Add event handler implementation here.
-        }
-
-        private void LeftArrowButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-        	// TODO: Add event handler implementation here.
-        }
-
-        private void LeftArrowButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-        	// TODO: Add event handler implementation here.
-        }
-
-        private void RightArrowButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-        	// TODO: Add event handler implementation here.
-        }
-
-        private void RightArrowButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-        	// TODO: Add event handler implementation here.
-        }
-
-        private void SwapChainBackgroundPanel_KeyDown_1(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
-        {
-            var possibleInput = KeyToPossibleInputType(e.Key);
-            if (possibleInput == null)
-                return;
-            
-            HandleInput((PossibleInputTypes)possibleInput, true);
-        }
-
-        private void SwapChainBackgroundPanel_KeyUp_1(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        private void SwapChainBackgroundPanelKeyDown(object sender, KeyRoutedEventArgs e)
         {
             var possibleInput = KeyToPossibleInputType(e.Key);
             if (possibleInput == null)
                 return;
 
-            HandleInput((PossibleInputTypes)possibleInput, false);
+            HandleInput((InputType)possibleInput, InputState.Pressed);
         }
 
-        public PossibleInputTypes? KeyToPossibleInputType(VirtualKey key)
+        private void SwapChainBackgroundPanelKeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            var possibleInput = KeyToPossibleInputType(e.Key);
+            if (possibleInput == null)
+                return;
+
+            HandleInput((InputType)possibleInput, InputState.Released);
+        }
+
+        public InputType? KeyToPossibleInputType(VirtualKey key)
         {
             switch (key)
             {
@@ -156,23 +142,23 @@ namespace MetroRetro
                 case VirtualKey.X:
                 case VirtualKey.LeftControl:
                 case VirtualKey.RightControl:
-                    return PossibleInputTypes.Space;
+                    return InputType.Space;
 
                 case VirtualKey.Up:
                 case VirtualKey.W:
-                    return PossibleInputTypes.Up;
+                    return InputType.Up;
 
                 case VirtualKey.Down:
                 case VirtualKey.S:
-                    return PossibleInputTypes.Down;
+                    return InputType.Down;
 
                 case VirtualKey.Left:
                 case VirtualKey.A:
-                    return PossibleInputTypes.Left;
+                    return InputType.Left;
 
                 case VirtualKey.Right:
                 case VirtualKey.D:
-                    return PossibleInputTypes.Right;
+                    return InputType.Right;
             }
 
             return null;
@@ -180,12 +166,20 @@ namespace MetroRetro
 
     }
 
-    public enum PossibleInputTypes
+    public enum InputType
     {
         Up,
         Down,
         Left,
         Right,
         Space
+    }
+
+    public enum InputState
+    {
+        Pressed,
+        Released,
+        Over,
+        Out
     }
 }

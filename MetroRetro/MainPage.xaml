@@ -4,7 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" KeyDown="SwapChainBackgroundPanel_KeyDown_1" KeyUp="SwapChainBackgroundPanel_KeyUp_1">
+    mc:Ignorable="d"
+    KeyDown="SwapChainBackgroundPanelKeyDown"
+    KeyUp="SwapChainBackgroundPanelKeyUp">
 
     <!-- Arrows buttons -->
     <Grid
@@ -34,8 +36,10 @@
             Background="White"
             BorderBrush="Black"
             BorderThickness="2"
-            PointerPressed="UpArrowButton_PointerPressed"
-            PointerReleased="UpArrowButton_PointerReleased">
+            PointerPressed="InputButtonPointerPressed"
+            PointerReleased="InputButtonPointerReleased"
+            PointerEntered="InputButtonPointerOver"
+            PointerExited="InputButtonPointerOut">
             <TextBlock
                 Text="↑"
                 FontFamily="Segoe UI"
@@ -44,7 +48,7 @@
                 TextAlignment="Center"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center" />
-            </Border>
+        </Border>
         <Border
             x:Name="DownArrowButton"
             Grid.Column="1"
@@ -56,8 +60,10 @@
             Background="White"
             BorderBrush="Black"
             BorderThickness="2"
-            PointerPressed="DownArrowButton_PointerPressed"
-            PointerReleased="DownArrowButton_PointerReleased">
+            PointerPressed="InputButtonPointerPressed"
+            PointerReleased="InputButtonPointerReleased"
+            PointerEntered="InputButtonPointerOver"
+            PointerExited="InputButtonPointerOut">
             <TextBlock
                 Text="↓"
                 FontFamily="Segoe UI"
@@ -66,7 +72,7 @@
                 TextAlignment="Center"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center" />
-            </Border>
+        </Border>
         <Border
             x:Name="LeftArrowButton"
             Grid.Column="0"
@@ -78,8 +84,10 @@
             Background="White"
             BorderBrush="Black"
             BorderThickness="2"
-            PointerPressed="LeftArrowButton_PointerPressed"
-            PointerReleased="LeftArrowButton_PointerReleased">
+            PointerPressed="InputButtonPointerPressed"
+            PointerReleased="InputButtonPointerReleased"
+            PointerEntered="InputButtonPointerOver"
+            PointerExited="InputButtonPointerOut">
             <TextBlock
                 Text="←"
                 FontFamily="Segoe UI"
@@ -88,7 +96,7 @@
                 TextAlignment="Center"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center" />
-            </Border>
+        </Border>
         <Border
             x:Name="RightArrowButton"
             Grid.Column="2"
@@ -100,8 +108,10 @@
             Background="White"
             BorderBrush="Black"
             BorderThickness="2"
-            PointerPressed="RightArrowButton_PointerPressed"
-            PointerReleased="RightArrowButton_PointerReleased">
+            PointerPressed="InputButtonPointerPressed"
+            PointerReleased="InputButtonPointerReleased"
+            PointerEntered="InputButtonPointerOver"
+            PointerExited="InputButtonPointerOut">
             <TextBlock
                 Text="→"
                 FontFamily="Segoe UI"
@@ -110,7 +120,7 @@
                 TextAlignment="Center"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center" />
-            </Border>
+        </Border>
     </Grid>
 
     <!-- Space button -->
@@ -131,19 +141,21 @@
             Background="White"
             BorderBrush="Black"
             BorderThickness="2"
-            PointerPressed="SpaceButton_PointerPressed"
-            PointerReleased="SpaceButton_PointerReleased">
+            PointerPressed="InputButtonPointerPressed"
+            PointerReleased="InputButtonPointerReleased"
+            PointerEntered="InputButtonPointerOver"
+            PointerExited="InputButtonPointerOut">
             <TextBlock
                 Text="shoot"
                 FontFamily="Segoe UI"
                 FontSize="32"
                 Foreground="Black"
                 TextAlignment="Center"
-                HorizontalAlignment="Center" 
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center" />
         </Border>
     </Grid>
-    
+
     <!-- Points text -->
     <TextBlock
         x:Name="PointsText"
@@ -157,7 +169,7 @@
         FontFamily="Segoe UI"
         TextAlignment="Right"
         FontSize="64" />
-    
+
     <!-- Debug text -->
     <TextBlock
         x:Name="DebugText"
