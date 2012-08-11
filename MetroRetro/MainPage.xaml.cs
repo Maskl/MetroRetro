@@ -23,6 +23,7 @@ using System.IO;
 using System.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -41,14 +42,15 @@ namespace MetroRetro
     /// </summary>
     public sealed partial class MainPage : SwapChainBackgroundPanel
     {
+
+
+        public Dictionary<PossibleInputTypes, Border> ButtonsDictionary;
+
         public MainPage()
         {
-            this.InitializeComponent();
-        }
+            InitializeComponent();
 
-        private void RangeBase_OnValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            //throw new NotImplementedException();
+            ButtonsDictionary = new Dictionary<PossibleInputTypes, Border> {{PossibleInputTypes.Space, SpaceButton}};
         }
 
         public void ButtonPressedOrReleased(Border button, bool pressed)
@@ -60,20 +62,29 @@ namespace MetroRetro
             button.BorderBrush = new SolidColorBrush(foreground);
         }
 
+        private readonly List<string> _debugTexts = new List<string>(); 
+        public void AddDebugText(string text)
+        {
+            _debugTexts.Add(text);
+            if (_debugTexts.Count > 10)
+                _debugTexts.RemoveAt(0);
+
+            DebugText.Text = _debugTexts.Aggregate("", (current, debugText) => current + (debugText + "\n"));
+        }
+
         public void HandleInput(PossibleInputTypes inputType, bool pressed)
         {
-            DebugText.Text = inputType.ToString() + " " + pressed;
+            ButtonPressedOrReleased(ButtonsDictionary[inputType], pressed);
+            AddDebugText(inputType + " " + pressed);
         }
 
         private void SpaceButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            ButtonPressedOrReleased(sender as Border, true);
             HandleInput(PossibleInputTypes.Space, true);
         }
 
         private void SpaceButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            ButtonPressedOrReleased(sender as Border, false);
             HandleInput(PossibleInputTypes.Space, false);
         }
 
@@ -85,6 +96,16 @@ namespace MetroRetro
         private void UpArrowButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
         	// TODO: Add event handler implementation here.
+        }
+
+        private void DownArrowButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            // TODO: Add event handler implementation here.
+        }
+
+        private void DownArrowButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            // TODO: Add event handler implementation here.
         }
 
         private void LeftArrowButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
@@ -106,6 +127,57 @@ namespace MetroRetro
         {
         	// TODO: Add event handler implementation here.
         }
+
+        private void SwapChainBackgroundPanel_KeyDown_1(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            var possibleInput = KeyToPossibleInputType(e.Key);
+            if (possibleInput == null)
+                return;
+            
+            HandleInput((PossibleInputTypes)possibleInput, true);
+        }
+
+        private void SwapChainBackgroundPanel_KeyUp_1(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            var possibleInput = KeyToPossibleInputType(e.Key);
+            if (possibleInput == null)
+                return;
+
+            HandleInput((PossibleInputTypes)possibleInput, false);
+        }
+
+        public PossibleInputTypes? KeyToPossibleInputType(VirtualKey key)
+        {
+            switch (key)
+            {
+                case VirtualKey.Space:
+                case VirtualKey.Enter:
+                case VirtualKey.Z:
+                case VirtualKey.X:
+                case VirtualKey.LeftControl:
+                case VirtualKey.RightControl:
+                    return PossibleInputTypes.Space;
+
+                case VirtualKey.Up:
+                case VirtualKey.W:
+                    return PossibleInputTypes.Up;
+
+                case VirtualKey.Down:
+                case VirtualKey.S:
+                    return PossibleInputTypes.Down;
+
+                case VirtualKey.Left:
+                case VirtualKey.A:
+                    return PossibleInputTypes.Left;
+
+                case VirtualKey.Right:
+                case VirtualKey.D:
+                    return PossibleInputTypes.Right;
+            }
+
+            return null;
+        }
+
     }
 
     public enum PossibleInputTypes
