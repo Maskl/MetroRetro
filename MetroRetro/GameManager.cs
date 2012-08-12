@@ -4,6 +4,7 @@ using System.Globalization;
 using CommonDX;
 using MetroRetro.Games;
 using SharpDX.Direct2D1;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 
@@ -15,6 +16,7 @@ namespace MetroRetro
         public Renderer Renderer { get; set; }
         public bool IsPause { get; set; }
         public bool IsTraining { get; set; }
+        public static int Record { get; set; }
 
         public int Points { get; set; }
         public int Lifes { get; set; }
@@ -35,6 +37,8 @@ namespace MetroRetro
                          };
 
             _currentGame = null;
+
+            LoadRecord();
         }
 
         public void HandleInput(InputType key, InputState state)
@@ -167,7 +171,22 @@ namespace MetroRetro
         {
             Pause(false);
 
-            var text = "Your result: 56411 points\nYOUR RECORD!";
+
+            var text = Points + " points\n";
+
+            if (Record < Points)
+            {
+                text += "YOUR BEST RESULT!";
+                if (Record > 0)
+                    text += "\n(Previous record: " + Record + ")";
+
+                SaveRecord(Points);
+            }
+            else
+            {
+                text += "(Record to beat: " + Record + ")";
+            }
+
             var dialog = new MessageDialog(text, "End of the game");
 
             var ans = 0;
@@ -276,6 +295,39 @@ namespace MetroRetro
 
             Page.SetPointsText(Points.ToString(/*"D8"*/));
             Page.SetLifesText(text);
+        }
+
+
+        static public async void SaveRecord(int record)
+        {
+            Record = record;
+
+            try
+            {
+                var folder = ApplicationData.Current.LocalFolder;
+                var file = await folder.CreateFileAsync("metroretrorecord.xml", CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(file, record.ToString());
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        static public async void LoadRecord()
+        {
+            var recordInt = 0;
+            try
+            {
+                var folder = ApplicationData.Current.LocalFolder;
+                var file = await folder.GetFileAsync("metroretrorecord.xml");
+                var record = await FileIO.ReadTextAsync(file);
+                recordInt = Convert.ToInt32(record);
+            }
+            catch (Exception)
+            {
+            }
+
+            Record = recordInt;
         }
     }
 
