@@ -254,5 +254,18 @@ namespace MetroRetro
         {
             TimeBorder.Opacity = visibility == Visibility.Collapsed ? 0 : 1;
         }
+
+        public void SetArrowButtons(bool up, bool down, bool left, bool right)
+        {
+            UpArrowButton.Visibility = up ? Visibility.Visible : Visibility.Collapsed;
+            DownArrowButton.Visibility = down ? Visibility.Visible : Visibility.Collapsed;
+            LeftArrowButton.Visibility = left ? Visibility.Visible : Visibility.Collapsed;
+            RightArrowButton.Visibility = right ? Visibility.Visible : Visibility.Collapsed;
+
+            foreach (var elem in _buttonsDictionary.Where(elem => _buttonsDictionary.ContainsKey(elem.Key)))
+            {
+                ButtonPressedOrReleased(_buttonsDictionary[elem.Key], InputState.Out);
+            }
+        }
     }
 }

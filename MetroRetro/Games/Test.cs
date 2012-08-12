@@ -19,7 +19,14 @@ namespace MetroRetro.Games
 
         public override void NewGame()
         {
+            _gameManager.Page.SetArrowButtons(false, false, false, false);
             base.NewGame();
+        }
+
+        public override void ContinueGame()
+        {
+            _gameManager.Page.SetArrowButtons(false, false, false, false);
+            base.ContinueGame();
         }
 
         public override void EndGame()

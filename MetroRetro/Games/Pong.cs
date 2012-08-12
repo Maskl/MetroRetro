@@ -37,6 +37,7 @@ namespace MetroRetro.Games
 
         public override void NewGame()
         {
+            _gameManager.Page.SetArrowButtons(true, true, false, false);
             _playerPos = new Point(GamesParams.MarginX0, 0.5f).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
                                                                      GamesParams.Margin1.Sub(_padSize.Half()));
 
@@ -58,6 +59,7 @@ namespace MetroRetro.Games
 
         public override void ContinueGame()
         {
+            _gameManager.Page.SetArrowButtons(true, true, false, false);
             base.ContinueGame();
         }
 
