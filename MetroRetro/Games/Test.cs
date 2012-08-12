@@ -13,14 +13,13 @@ namespace MetroRetro.Games
 {
     class Test : BaseGame
     {
-        private GameManager _gameManager;
-
-        public Test(GameManager gameManager) : base(gameManager)
+        public Test(GameManager gameManager, float maxTime) : base(gameManager, maxTime)
         {
         }
 
         public override void NewGame()
         {
+            base.NewGame();
         }
 
         public override void EndGame()
@@ -29,7 +28,7 @@ namespace MetroRetro.Games
         
         private TextFormat _textFormat;
         private PathGeometry1 _pathGeometry1;
-        public override void Update(DeviceContext context, TargetBase target, Point screenSize, float dt, float elapsedTime)
+        public override void Update(DeviceContext context, TargetBase target, DeviceManager deviceManager, Point screenSize, float dt, float elapsedTime)
         {
             var centerX = screenSize.X / 2;
             var centerY = screenSize.Y / 2;
@@ -79,6 +78,8 @@ namespace MetroRetro.Games
             context.Transform = Matrix.Scaling(scaling) * Matrix.RotationZ(t * 1.5f) * Matrix.Translation(centerX, centerY, 0);
 
             context.DrawGeometry(_pathGeometry1, GamesParams.EnemyColor, 2.0f);
+
+            DrawBoardBorder(context, deviceManager, screenSize, dt);
         }
 
         public override void KeyPressed(InputType key)

@@ -14,7 +14,7 @@ namespace MetroRetro.Games
 {
     class Pong : BaseGame
     {
-        public Pong(GameManager gameManager) : base(gameManager)
+        public Pong(GameManager gameManager, float maxTime) : base(gameManager, maxTime)
         {
         }
 
@@ -52,13 +52,15 @@ namespace MetroRetro.Games
             _playerDir = new Point(0.0f, 0.0f);
             _enemyDir = new Point(0.0f, 0.0f);
             _ballDir = new Point(1.0f, 0.0f);
+
+            base.NewGame();
         }
 
         public override void EndGame()
         {
         }
 
-        public override void Update(DeviceContext context, TargetBase target, Point screenSize, float dt, float elapsedTime)
+        public override void Update(DeviceContext context, TargetBase target, DeviceManager deviceManager, Point screenSize, float dt, float elapsedTime)
         {
             // Player moving
             _playerPos = _playerPos.Add(_playerDir.Mul(_playerSpd).Mul(dt)).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
@@ -72,6 +74,12 @@ namespace MetroRetro.Games
                                    GamesParams.Margin1.Sub(_ballSize.Half())))
             {
                 _ballDir.Y = -_ballDir.Y;
+
+                if (_ballPos.X < GamesParams.MarginX0 + 0.001f)
+                    _gameManager.Die();
+
+                if (_ballPos.X > GamesParams.MarginX1 - 0.001f)
+                    _gameManager.Win(1000);
             }
 
             _ballPos = _ballPos.Clamp(GamesParams.Margin0.Add(_ballSize.Half()),
@@ -127,12 +135,7 @@ namespace MetroRetro.Games
 
             context.FillRectangle(screenSize.ApplyTo(ballBox), GamesParams.AdditionalColor);
 
-            DrawBoardBorder(context, screenSize);
-        }
-
-        protected void DrawBoardBorder(DeviceContext context, Point screenSize)
-        {
-            context.DrawRectangle(screenSize.ApplyTo(GamesParams.Margin0.ToRectangleWith(GamesParams.Margin1)), GamesParams.ObstaclesColor, 2);
+            DrawBoardBorder(context, deviceManager, screenSize, dt);
         }
 
         public override void KeyPressed(InputType key)

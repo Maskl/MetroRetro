@@ -29,8 +29,8 @@ namespace MetroRetro
 
             _games = new Dictionary<GameType, BaseGame>
                          {
-                             {GameType.Test, new Test(this)},
-                             {GameType.Pong, new Pong(this)}
+                             {GameType.Test, new Test(this, 3)},
+                             {GameType.Pong, new Pong(this, 20)}
                          };
 
             _currentGame = null;
@@ -90,7 +90,7 @@ namespace MetroRetro
             var elapsedTimeF = elapsedTime / 1000.0f;
             var dt = elapsedTimeF - _oldElapsedTimeF;
             _oldElapsedTimeF = elapsedTimeF;
-            _currentGame.Update(context2D, target, screenSize, dt, elapsedTimeF);
+            _currentGame.Update(context2D, target, deviceManager, screenSize, dt, elapsedTimeF);
 
             context2D.EndDraw();
         }
@@ -109,7 +109,7 @@ namespace MetroRetro
                 return;
             
             IsPause = true;
-
+            
             Renderer.Pause();
             if (showDialog)
                 ShowPauseDialog();
@@ -186,12 +186,13 @@ namespace MetroRetro
             await dialog.ShowAsync();
 
             IsTraining = ans == 1;
-                
-            Start(GameType.Pong);
-            Unpause();
 
             Points = 0;
             Lifes = 3;
+
+            Start(GameType.Pong);
+            Unpause();
+
         }
 
         public void StartNextGame()
@@ -208,10 +209,18 @@ namespace MetroRetro
             RedrawPointsAndLifes();
         }
 
-        public void Dead(int points)
+        public void Win(int points)
+        {
+            Points += points;
+            RedrawPointsAndLifes();
+            StartNextGame();
+        }
+
+        public void Die()
         {
             if (--Lifes <= 0)
             {
+                RedrawPointsAndLifes();
                 EndSession();
             }
             else
@@ -221,14 +230,19 @@ namespace MetroRetro
             }
         }
 
+        public void Interrupt()
+        {
+            StartNextGame();
+        }
+
         private void RedrawPointsAndLifes()
         {
-            var text = Points.ToString(new NumberFormatInfo {NumberDecimalDigits = 8});
-            text += " ";
+            var text = "";
             for (var i = 0; i < Lifes; i++)
                 text += "❤";
 
-            Page.SetPointsText(text);
+            Page.SetPointsText(Points.ToString("D8"));
+            Page.SetLifesText(text);
         }
     }
 

@@ -23,34 +23,42 @@ namespace MetroRetro
         private readonly Dictionary<Border, Color> _buttonsLastColors;
         private GameManager _gameManager;
 
-
         private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
         {
             ResizeAll(e.Size);
+            _gameManager.Pause(true);
         }
 
         private void ResizeAll(Size size)
         {
             var menuMrg = MenuContainer.Margin;
-            menuMrg.Left = GamesParams.MarginX0 * size.Width - 9;
+            menuMrg.Left = GamesParams.MarginX0 * size.Width - 3;
             menuMrg.Top = GamesParams.MarginY0 * size.Height - 55;
-            MenuContainer.Margin = menuMrg;
 
             var lifesMrg = menuMrg;
             lifesMrg.Left += 105;
-            LifesText.Margin = lifesMrg;
+
 
             var pointsMrg = menuMrg;
             pointsMrg.Left = 0;
             pointsMrg.Right = GamesParams.MarginX0 * size.Width;
+
+            var timeRectangleMrg = lifesMrg;
+            timeRectangleMrg.Right = pointsMrg.Right;
+            timeRectangleMrg.Top += 2;
+
+            lifesMrg.Left += 7;
+            pointsMrg.Right += 7;
+
+            MenuContainer.Margin = menuMrg;
+            LifesText.Margin = lifesMrg;
             PointsText.Margin = pointsMrg;
+            TimeRectangle.Margin = timeRectangleMrg;
 
             PointsText.Visibility = size.Width < 600 ? Visibility.Collapsed : Visibility.Visible;
 
             ArrowsContainer.Width = size.Width > 600 ? size.Width / 5 : 220;
             ArrowsContainer.Height = ArrowsContainer.Width / 3 * 2;
-
-            AddDebugText(size.ToString());
         }
 
         public MainPage(GameManager gameManager)
@@ -216,6 +224,11 @@ namespace MetroRetro
         public void SetPointsText(string text)
         {
             PointsText.Text = text;
+        }
+
+        public void SetLifesText(string text)
+        {
+            LifesText.Text = text;
         }
     }
 }

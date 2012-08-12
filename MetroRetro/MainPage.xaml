@@ -169,7 +169,7 @@
             Grid.Row="0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Margin="5"
+            Margin="0"
             Padding="0"
             Background="White"
             BorderBrush="Black"
@@ -192,7 +192,7 @@
     <!-- Points text -->
     <TextBlock
         x:Name="PointsText"
-        Text="152600"
+        Text="00000000"
         Width="250"
         Height="50"
         HorizontalAlignment="Right"
@@ -225,5 +225,6 @@
     	TextWrapping="Wrap"
     	FontFamily="Segoe UI"
     	FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Opacity="0.5" Foreground="Red" />
+    <Rectangle x:Name="TimeRectangle" Fill="#FF666666" Height="46" Margin="185,50,25,0" Stroke="Black" VerticalAlignment="Top" Width="1156" Canvas.ZIndex="-10" StrokeThickness="0" Opacity="0.5"/>
 
 </SwapChainBackgroundPanel>
