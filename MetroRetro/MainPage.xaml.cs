@@ -45,7 +45,6 @@ namespace MetroRetro
             var lifesMrg = menuMrg;
             lifesMrg.Left += 105;
 
-
             var pointsMrg = menuMrg;
             pointsMrg.Left = 0;
             pointsMrg.Right = GamesParams.MarginX0 * size.Width;
@@ -61,7 +60,7 @@ namespace MetroRetro
             MenuContainer.Margin = menuMrg;
             LifesText.Margin = lifesMrg;
             PointsText.Margin = pointsMrg;
-            TimeRectangle.Margin = timeRectangleMrg;
+            TimeBorder.Margin = timeRectangleMrg;
 
             TimeRectangle.Width = _maxTimeRectangleWidth;
 
@@ -249,6 +248,11 @@ namespace MetroRetro
                 return;
 
             TimeRectangle.Width = _maxTimeRectangleWidth * (1 - v);
+        }
+
+        public void SetTimeBorderVisibility(Visibility visibility)
+        {
+            TimeBorder.Opacity = visibility == Visibility.Collapsed ? 0 : 1;
         }
     }
 }

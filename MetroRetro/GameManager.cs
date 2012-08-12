@@ -5,6 +5,7 @@ using CommonDX;
 using MetroRetro.Games;
 using SharpDX.Direct2D1;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 
 namespace MetroRetro
 {
@@ -143,7 +144,10 @@ namespace MetroRetro
             var cmd3 = new UICommand("Back to menu", cmd => ans = 3, 3);
 
             dialog.Commands.Add(cmd1);
-            dialog.Commands.Add(cmd2);
+
+            if (IsTraining)
+                dialog.Commands.Add(cmd2);
+
             dialog.Commands.Add(cmd3);
             dialog.DefaultCommandIndex = 0;
 
@@ -167,7 +171,7 @@ namespace MetroRetro
             var dialog = new MessageDialog(text, "End of the game");
 
             var ans = 0;
-            var cmd1 = new UICommand("Back to menu", cmd => ans = 1, 1);
+            var cmd1 = new UICommand("Ok", cmd => ans = 1, 1);
 
             dialog.Commands.Add(cmd1);
             dialog.DefaultCommandIndex = 0;
@@ -181,8 +185,7 @@ namespace MetroRetro
         public async void StartSession()
         {
             Pause(false);
-            var dialog = new MessageDialog("Tap one of the buttons below.\n" +
-                                           "In training mode you will need to change game manually (Button on the top)", "Hi!");
+            var dialog = new MessageDialog("Choose one of the game modes below.", "Hi!");
 
             var ans = 0;
             var cmd1 = new UICommand("Training", cmd => ans = 1, 1);
@@ -202,6 +205,15 @@ namespace MetroRetro
             foreach (var game in _games)
             {
                 game.Value.PlayedInThisSession = false;
+            }
+
+            if (IsTraining)
+            {
+                Page.SetTimeBorderVisibility(Visibility.Collapsed);
+            }
+            else
+            {
+                Page.SetTimeBorderVisibility(Visibility.Visible);
             }
 
             Start(GameType.Pong);
@@ -262,7 +274,7 @@ namespace MetroRetro
             for (var i = 0; i < Lifes; i++)
                 text += "❤";
 
-            Page.SetPointsText(Points.ToString("D8"));
+            Page.SetPointsText(Points.ToString(/*"D8"*/));
             Page.SetLifesText(text);
         }
     }

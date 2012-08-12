@@ -188,6 +188,9 @@
                 VerticalAlignment="Center" />
         </Border>
     </Grid>
+    <Border x:Name="TimeBorder" BorderThickness="0" HorizontalAlignment="Left" Height="46" Margin="185,50,0,0" VerticalAlignment="Top" Width="1156">
+    	<Rectangle x:Name="TimeRectangle" Fill="#FF000088" Margin="0,0,0,-2" Stroke="Black" Canvas.ZIndex="-10" StrokeThickness="0" HorizontalAlignment="Left" Width="100"/>
+    </Border>
   
     <!-- Points text -->
     <TextBlock
@@ -225,6 +228,5 @@
     	TextWrapping="Wrap"
     	FontFamily="Segoe UI"
     	FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Foreground="Red" Opacity="0.8" />
-    <Rectangle x:Name="TimeRectangle" Fill="#FF000088" Height="46" Margin="185,50,0,0" Stroke="Black" VerticalAlignment="Top" Width="1156" Canvas.ZIndex="-10" StrokeThickness="0" HorizontalAlignment="Left"/>
 
 </SwapChainBackgroundPanel>
