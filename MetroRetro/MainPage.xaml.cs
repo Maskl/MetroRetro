@@ -23,9 +23,41 @@ namespace MetroRetro
         private readonly Dictionary<Border, Color> _buttonsLastColors;
         private GameManager _gameManager;
 
+
+        private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        {
+            ResizeAll(e.Size);
+        }
+
+        private void ResizeAll(Size size)
+        {
+            var menuMrg = MenuContainer.Margin;
+            menuMrg.Left = GamesParams.MarginX0 * size.Width - 9;
+            menuMrg.Top = GamesParams.MarginY0 * size.Height - 55;
+            MenuContainer.Margin = menuMrg;
+
+            var lifesMrg = menuMrg;
+            lifesMrg.Left += 105;
+            LifesText.Margin = lifesMrg;
+
+            var pointsMrg = menuMrg;
+            pointsMrg.Left = 0;
+            pointsMrg.Right = GamesParams.MarginX0 * size.Width;
+            PointsText.Margin = pointsMrg;
+
+            PointsText.Visibility = size.Width < 600 ? Visibility.Collapsed : Visibility.Visible;
+
+            ArrowsContainer.Width = size.Width > 600 ? size.Width / 5 : 220;
+            ArrowsContainer.Height = ArrowsContainer.Width / 3 * 2;
+
+            AddDebugText(size.ToString());
+        }
+
         public MainPage(GameManager gameManager)
         {
+            Window.Current.SizeChanged += WindowSizeChanged;
             InitializeComponent();
+            ResizeAll(new Size(Window.Current.Bounds.Width, Window.Current.Bounds.Height));
             
             _buttonsDictionary = new Dictionary<InputType, Border>
                                     {

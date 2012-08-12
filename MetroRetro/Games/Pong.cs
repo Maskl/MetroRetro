@@ -58,12 +58,8 @@ namespace MetroRetro.Games
         {
         }
 
-        private float aaa = 0;
         public override void Update(DeviceContext context, TargetBase target, Point screenSize, float dt, float elapsedTime)
         {
-            aaa += dt;
-            Debug(aaa.ToString());
-
             // Player moving
             _playerPos = _playerPos.Add(_playerDir.Mul(_playerSpd).Mul(dt)).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
                                                                                   GamesParams.Margin1.Sub(_padSize.Half()));

@@ -15,7 +15,7 @@
         Width="220"
         HorizontalAlignment="Right"
         VerticalAlignment="Bottom"
-        Margin="0,0,50,50" Canvas.ZIndex="-1" Opacity="0.5">
+        Margin="0,0,50,50" Canvas.ZIndex="5" Opacity="0.5">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -201,7 +201,7 @@
         TextWrapping="Wrap"
         FontFamily="Segoe UI"
         TextAlignment="Right"
-        FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Opacity="0.5" Foreground="Blue" />
+        FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Opacity="0.5" Foreground="White" />
 
     <!-- Debug text -->
     <TextBlock
@@ -215,7 +215,7 @@
         VerticalAlignment="Top"
         FontSize="21.333" Foreground="#FFF1C54E" />
     <TextBlock
-    	x:Name="PointsText_Copy"
+    	x:Name="LifesText"
     	Text="❤❤❤"
     	Width="250"
     	Height="50"
