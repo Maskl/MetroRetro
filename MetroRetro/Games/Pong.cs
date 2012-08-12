@@ -1,23 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommonDX;
-using SharpDX;
 using SharpDX.Direct2D1;
-using SharpDX.DirectWrite;
-using Windows.Foundation;
-using Matrix = SharpDX.DirectWrite.Matrix;
 
 namespace MetroRetro.Games
 {
     class Pong : BaseGame
     {
-        public Pong(GameManager gameManager, float maxTime) : base(gameManager, maxTime)
-        {
-        }
-
         private Point _playerPos;
         private Point _playerDir;
         private float _playerSpd;
@@ -34,6 +22,11 @@ namespace MetroRetro.Games
 
         private readonly Point _padSize = new Point(0.05f, 0.25f);
         private readonly Point _ballSize = new Point(0.01f, 0.01f);
+
+        public Pong(GameManager gameManager, float maxTime)
+            : base(gameManager, maxTime)
+        {
+        }
 
         public override void NewGame()
         {
@@ -150,7 +143,7 @@ namespace MetroRetro.Games
 
             context.FillRectangle(screenSize.ApplyTo(ballBox), GamesParams.AdditionalColor);
 
-            DrawBoardBorder(context, deviceManager, screenSize, dt);
+            base.Update(context, target, deviceManager, screenSize, dt, elapsedTime);
         }
 
         public override void KeyPressed(InputType key)

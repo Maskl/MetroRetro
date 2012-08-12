@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using MetroRetro.Games;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 namespace MetroRetro
 {
@@ -22,9 +15,10 @@ namespace MetroRetro
     {
         private readonly Dictionary<InputType, Border> _buttonsDictionary;
         private readonly Dictionary<Border, Color> _buttonsLastColors;
-        private GameManager _gameManager;
+        private readonly GameManager _gameManager;
+        private double _maxTimeRectangleWidth;
 
-        private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        private void WindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             ResizeAll(e.Size);
             _gameManager.Pause(true);
@@ -35,7 +29,6 @@ namespace MetroRetro
             _gameManager.Pause(true);
         }
 
-        private double _maxTimeRectangleWidth;
         private void ResizeAll(Size size)
         {
             var menuMrg = MenuContainer.Margin;
@@ -99,7 +92,6 @@ namespace MetroRetro
 
             _gameManager = gameManager;
         }
-
 
         // Sets colors to buttons depends on event type.
         private void ButtonPressedOrReleased(Border button, InputState state)
@@ -187,13 +179,13 @@ namespace MetroRetro
         {
             switch (key)
             {
-                case VirtualKey.Space:
-                case VirtualKey.Enter:
-                case VirtualKey.Z:
-                case VirtualKey.X:
-                case VirtualKey.LeftControl:
-                case VirtualKey.RightControl:
-                    return InputType.Space;
+                //case VirtualKey.Space:
+                //case VirtualKey.Enter:
+                //case VirtualKey.Z:
+                //case VirtualKey.X:
+                //case VirtualKey.LeftControl:
+                //case VirtualKey.RightControl:
+                //    return InputType.Space;
 
                 case VirtualKey.Up:
                 case VirtualKey.W:
@@ -221,7 +213,7 @@ namespace MetroRetro
             return null;
         }
 
-        // Simply method to show debug informations.
+        // Simple method to show debug informations.
         private readonly List<string> _debugTexts = new List<string>();
         public void AddDebugText(string text)
         {

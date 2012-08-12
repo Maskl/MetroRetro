@@ -15,7 +15,9 @@
         Width="220"
         HorizontalAlignment="Right"
         VerticalAlignment="Bottom"
-        Margin="0,0,50,50" Canvas.ZIndex="5" Opacity="0.8">
+        Margin="0,0,50,50"
+        Canvas.ZIndex="5"
+        Opacity="0.8">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -130,7 +132,8 @@
         Width="500"
         HorizontalAlignment="Center"
         VerticalAlignment="Bottom"
-        Margin="0,0,300,50" Visibility="Collapsed">
+        Margin="0,0,300,50"
+        Visibility="Collapsed">
         <Border
             x:Name="SpaceButton"
             Grid.Row="0"
@@ -163,7 +166,8 @@
         Width="100"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
-        Margin="50,50,0,0" Opacity="0.8">
+        Margin="50,50,0,0"
+        Opacity="0.8">
         <Border
             x:Name="MenuButton"
             Grid.Row="0"
@@ -188,10 +192,28 @@
                 VerticalAlignment="Center" />
         </Border>
     </Grid>
-    <Border x:Name="TimeBorder" BorderThickness="0" HorizontalAlignment="Left" Height="46" Margin="185,50,0,0" VerticalAlignment="Top" Width="1156">
-    	<Rectangle x:Name="TimeRectangle" Fill="#FF000088" Margin="0,0,0,-2" Stroke="Black" Canvas.ZIndex="-10" StrokeThickness="0" HorizontalAlignment="Left" Width="100"/>
+
+    <!-- Timeline -->
+    <Border
+        x:Name="TimeBorder"
+        BorderThickness="0"
+        HorizontalAlignment="Left"
+        Height="46"
+        Margin="185,50,0,0"
+        VerticalAlignment="Top"
+        Width="1156"
+        Opacity="0">
+        <Rectangle
+            x:Name="TimeRectangle"
+            Fill="#FF000088"
+            Margin="0,0,0,-2"
+            Stroke="Black"
+            Canvas.ZIndex="-10"
+            StrokeThickness="0"
+            HorizontalAlignment="Left"
+            Width="100" />
     </Border>
-  
+
     <!-- Points text -->
     <TextBlock
         x:Name="PointsText"
@@ -204,7 +226,28 @@
         TextWrapping="Wrap"
         FontFamily="Segoe UI"
         TextAlignment="Right"
-        FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Foreground="White" Opacity="0.8" />
+        FontSize="34.667"
+        Canvas.ZIndex="1"
+        IsHitTestVisible="False"
+        Foreground="White"
+        Opacity="0.8" />
+
+    <!-- Lifes text -->
+    <TextBlock
+        x:Name="LifesText"
+        Text="❤❤❤"
+        Width="250"
+        Height="50"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Margin="160,50,0,0"
+        TextWrapping="Wrap"
+        FontFamily="Segoe UI"
+        FontSize="34.667"
+        Canvas.ZIndex="1"
+        IsHitTestVisible="False"
+        Foreground="Red"
+        Opacity="0.8" />
 
     <!-- Debug text -->
     <TextBlock
@@ -216,17 +259,7 @@
         HorizontalAlignment="Left"
         TextWrapping="Wrap"
         VerticalAlignment="Top"
-        FontSize="21.333" Foreground="#FFF1C54E" />
-    <TextBlock
-    	x:Name="LifesText"
-    	Text="❤❤❤"
-    	Width="250"
-    	Height="50"
-    	HorizontalAlignment="Left"
-    	VerticalAlignment="Top"
-    	Margin="160,50,0,0"
-    	TextWrapping="Wrap"
-    	FontFamily="Segoe UI"
-    	FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Foreground="Red" Opacity="0.8" />
+        FontSize="21.333"
+        Foreground="#FFF1C54E" />
 
 </SwapChainBackgroundPanel>

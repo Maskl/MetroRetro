@@ -86,7 +86,7 @@ namespace MetroRetro.Games
 
             context.DrawGeometry(_pathGeometry1, GamesParams.EnemyColor, 2.0f);
 
-            DrawBoardBorder(context, deviceManager, screenSize, dt);
+            base.Update(context, target, deviceManager, screenSize, dt, elapsedTime);
         }
 
         public override void KeyPressed(InputType key)

@@ -99,7 +99,6 @@ namespace MetroRetro
             var context2D = target.DeviceManager.ContextDirect2D;
             context2D.BeginDraw();
             context2D.Clear(GamesParams.BackgroundColorNormal);
-         //   context2D.TextAntialiasMode = TextAntialiasMode.Grayscale;
 
             var elapsedTimeF = elapsedTime / 1000.0f;
             var dt = elapsedTimeF - _oldElapsedTimeF;
@@ -140,7 +139,7 @@ namespace MetroRetro
 
         private async void ShowPauseDialog()
         {
-            var dialog = new MessageDialog("Click one of the buttons below.", "Pause");
+            var dialog = new MessageDialog("Tap one of the buttons below.", "Pause");
 
             var ans = 0;
             var cmd1 = new UICommand("Resume", cmd => ans = 1, 1);
@@ -170,7 +169,6 @@ namespace MetroRetro
         public async void EndSession()
         {
             Pause(false);
-
 
             var text = Points + " points\n";
 
