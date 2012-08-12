@@ -28,23 +28,23 @@ namespace MetroRetro
 
             _gameTime += dt;
 
-            const float u = 0.25f;
-            if (_gameTime < 2 * u)
+            const float u = 1.00f;
+            if (_gameTime < u)
             {
-                var op = _gameTime < u ? _gameTime / u : 1 - (_gameTime - u) * u;
+                var op = 1 - _gameTime / u;
+                var hideBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White, new BrushProperties { Opacity = op });
+                context.FillRectangle(screenSize.ApplyTo(new RectangleF(0, 0, 1, 1)), hideBrush);
+            }
+
+            if (_gameTime > _gameMaxTime - u)
+            {
+                var op = 1 - (_gameMaxTime - _gameTime) / u;
                 var hideBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White, new BrushProperties { Opacity = op });
                 context.FillRectangle(screenSize.ApplyTo(new RectangleF(0, 0, 1, 1)), hideBrush);
             }
 
             _gameManager.Page.SetTimeRectangleWidth(_gameTime / _gameMaxTime);
-         /*   float x = _gameTime / _gameMaxTime;
-            var xxx = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White, new BrushProperties { Opacity = 0.25f });
-            context.FillRectangle(screenSize.ApplyTo(new RectangleF(
-                GamesParams.MarginX0, 
-                GamesParams.MarginY0 - 0.06f,
-                GamesParams.MarginX0 * x + GamesParams.MarginX1 * (1 - x),
-                GamesParams.MarginY0 - 0.014f)), xxx);
-            */
+
             if (_gameTime > _gameMaxTime)
                 _gameManager.Interrupt();
         }

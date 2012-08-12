@@ -15,7 +15,7 @@
         Width="220"
         HorizontalAlignment="Right"
         VerticalAlignment="Bottom"
-        Margin="0,0,50,50" Canvas.ZIndex="5" Opacity="0.5">
+        Margin="0,0,50,50" Canvas.ZIndex="5" Opacity="0.8">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -163,7 +163,7 @@
         Width="100"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
-        Margin="50,50,0,0" Opacity="0.5">
+        Margin="50,50,0,0" Opacity="0.8">
         <Border
             x:Name="MenuButton"
             Grid.Row="0"
@@ -201,7 +201,7 @@
         TextWrapping="Wrap"
         FontFamily="Segoe UI"
         TextAlignment="Right"
-        FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Opacity="0.5" Foreground="White" />
+        FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Foreground="White" Opacity="0.8" />
 
     <!-- Debug text -->
     <TextBlock
@@ -224,7 +224,7 @@
     	Margin="160,50,0,0"
     	TextWrapping="Wrap"
     	FontFamily="Segoe UI"
-    	FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Opacity="0.5" Foreground="Red" />
-    <Rectangle x:Name="TimeRectangle" Fill="#FF666666" Height="46" Margin="185,50,25,0" Stroke="Black" VerticalAlignment="Top" Width="1156" Canvas.ZIndex="-10" StrokeThickness="0" Opacity="0.5"/>
+    	FontSize="34.667" Canvas.ZIndex="1" IsHitTestVisible="False" Foreground="Red" Opacity="0.8" />
+    <Rectangle x:Name="TimeRectangle" Fill="#FF000088" Height="46" Margin="185,50,0,0" Stroke="Black" VerticalAlignment="Top" Width="1156" Canvas.ZIndex="-10" StrokeThickness="0" HorizontalAlignment="Left"/>
 
 </SwapChainBackgroundPanel>
