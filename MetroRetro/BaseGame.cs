@@ -17,6 +17,8 @@ namespace MetroRetro
             _gameTime = 0;
         }
 
+        public bool PlayedInThisSession { get; set; }
+
         protected void Debug(string text)
         {
             _gameManager.Page.AddDebugText(text);
@@ -28,25 +30,33 @@ namespace MetroRetro
 
             _gameTime += dt;
 
-            const float u = 1.00f;
-            if (_gameTime < u)
+            if (!_gameManager.IsTraining)
             {
-                var op = 1 - _gameTime / u;
-                var hideBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White, new BrushProperties { Opacity = op });
-                context.FillRectangle(screenSize.ApplyTo(new RectangleF(0, 0, 1, 1)), hideBrush);
+                const float u = 1.00f;
+                if (_gameTime < u)
+                {
+                    var op = 1 - _gameTime/u;
+                    var hideBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White,
+                                                        new BrushProperties {Opacity = op});
+                    context.FillRectangle(screenSize.ApplyTo(new RectangleF(0, 0, 1, 1)), hideBrush);
+                }
+
+                if (_gameTime > _gameMaxTime - u)
+                {
+                    var op = 1 - (_gameMaxTime - _gameTime)/u;
+                    var hideBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White,
+                                                        new BrushProperties {Opacity = op});
+                    context.FillRectangle(screenSize.ApplyTo(new RectangleF(0, 0, 1, 1)), hideBrush);
+                }
+
+                float bar;
+                bar = _gameManager.IsTraining ? 1 : _gameTime/_gameMaxTime;
+                _gameManager.Page.SetTimeRectangleWidth(bar);
+                _gameManager.RedrawPointsAndLifes();
+
+                if (_gameTime > _gameMaxTime)
+                    _gameManager.Interrupt();
             }
-
-            if (_gameTime > _gameMaxTime - u)
-            {
-                var op = 1 - (_gameMaxTime - _gameTime) / u;
-                var hideBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White, new BrushProperties { Opacity = op });
-                context.FillRectangle(screenSize.ApplyTo(new RectangleF(0, 0, 1, 1)), hideBrush);
-            }
-
-            _gameManager.Page.SetTimeRectangleWidth(_gameTime / _gameMaxTime);
-
-            if (_gameTime > _gameMaxTime)
-                _gameManager.Interrupt();
         }
 
         public virtual void NewGame()
@@ -58,5 +68,9 @@ namespace MetroRetro
         public abstract void Update(DeviceContext context, TargetBase target, DeviceManager deviceManager, Point screenSize, float dt, float elapsedTime);
         public abstract void KeyPressed(InputType key);
         public abstract void KeyReleased(InputType key);
+        public virtual void ContinueGame()
+        {
+            _gameTime = 0;
+        }
     }
 }

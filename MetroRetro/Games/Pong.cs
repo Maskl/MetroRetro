@@ -56,6 +56,11 @@ namespace MetroRetro.Games
             base.NewGame();
         }
 
+        public override void ContinueGame()
+        {
+            base.ContinueGame();
+        }
+
         public override void EndGame()
         {
         }
@@ -76,10 +81,18 @@ namespace MetroRetro.Games
                 _ballDir.Y = -_ballDir.Y;
 
                 if (_ballPos.X < GamesParams.MarginX0 + 0.001f)
+                {
                     _gameManager.Die();
+                    _ballPos = new Point(0.5f, 0.5f);
+                    _ballDir = new Point(1.0f, 0.0f);
+                }
 
                 if (_ballPos.X > GamesParams.MarginX1 - 0.001f)
+                {
                     _gameManager.Win(1000);
+                    _ballPos = new Point(0.5f, 0.5f);
+                    _ballDir = new Point(-1.0f, 0.0f);
+                }
             }
 
             _ballPos = _ballPos.Clamp(GamesParams.Margin0.Add(_ballSize.Half()),

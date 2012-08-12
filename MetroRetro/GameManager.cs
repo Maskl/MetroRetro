@@ -69,7 +69,16 @@ namespace MetroRetro
                 _currentGame.EndGame();
 
             _currentGame = _games[game];
-            _currentGame.NewGame();
+
+            if (!IsTraining && _currentGame.PlayedInThisSession)
+            {
+                _currentGame.ContinueGame();
+            }
+            else
+            {
+                _currentGame.NewGame();
+                _currentGame.PlayedInThisSession = true;
+            }
 
             RedrawPointsAndLifes();
         }
@@ -190,6 +199,11 @@ namespace MetroRetro
             Points = 0;
             Lifes = 3;
 
+            foreach (var game in _games)
+            {
+                game.Value.PlayedInThisSession = false;
+            }
+
             Start(GameType.Pong);
             Unpause();
 
@@ -213,7 +227,8 @@ namespace MetroRetro
         {
             Points += points;
             RedrawPointsAndLifes();
-            StartNextGame();
+            if (!IsTraining)
+                StartNextGame();
         }
 
         public void Die()
@@ -221,12 +236,18 @@ namespace MetroRetro
             if (--Lifes <= 0)
             {
                 RedrawPointsAndLifes();
-                EndSession();
+                
+                if (!IsTraining)
+                    EndSession();
+                else
+                    StartNextGame();
             }
             else
             {
                 RedrawPointsAndLifes();
-                StartNextGame();
+                
+                if (!IsTraining)
+                    StartNextGame();
             }
         }
 
@@ -235,7 +256,7 @@ namespace MetroRetro
             StartNextGame();
         }
 
-        private void RedrawPointsAndLifes()
+        public void RedrawPointsAndLifes()
         {
             var text = "";
             for (var i = 0; i < Lifes; i++)

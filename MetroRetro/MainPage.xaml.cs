@@ -7,6 +7,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,6 +27,11 @@ namespace MetroRetro
         private void WindowSizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
         {
             ResizeAll(e.Size);
+            _gameManager.Pause(true);
+        }
+
+        private void CurrentOnVisibilityChanged(object sender, VisibilityChangedEventArgs visibilityChangedEventArgs)
+        {
             _gameManager.Pause(true);
         }
 
@@ -67,6 +73,7 @@ namespace MetroRetro
 
         public MainPage(GameManager gameManager)
         {
+            Window.Current.VisibilityChanged += CurrentOnVisibilityChanged;
             Window.Current.SizeChanged += WindowSizeChanged;
             InitializeComponent();
             ResizeAll(new Size(Window.Current.Bounds.Width, Window.Current.Bounds.Height));
@@ -93,6 +100,7 @@ namespace MetroRetro
 
             _gameManager = gameManager;
         }
+
 
         // Sets colors to buttons depends on event type.
         private void ButtonPressedOrReleased(Border button, InputState state)
@@ -237,7 +245,7 @@ namespace MetroRetro
 
         public void SetTimeRectangleWidth(float v)
         {
-            if (v <= 0.01 || v >= 0.99)
+            if (v < 0 || v > 1)
                 return;
 
             TimeRectangle.Width = _maxTimeRectangleWidth * (1 - v);
