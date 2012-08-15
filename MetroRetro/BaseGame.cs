@@ -26,11 +26,13 @@ namespace MetroRetro
 
         public virtual void NewGame()
         {
+            SetArrows();
             _gameTime = 0;
         }
 
         public virtual void ContinueGame()
         {
+            SetArrows();
             _gameTime = 0;
         }
 
@@ -71,6 +73,11 @@ namespace MetroRetro
                 if (_gameTime > _gameMaxTime)
                     _gameManager.Interrupt();
             }
+        }
+
+        public virtual void SetArrows()
+        {
+            _gameManager.Page.SetArrowButtons(true, true, true, true);
         }
 
         public abstract void KeyPressed(InputType key);

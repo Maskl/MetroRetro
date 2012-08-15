@@ -28,9 +28,13 @@ namespace MetroRetro.Games
         {
         }
 
-        public override void NewGame()
+        public override void SetArrows()
         {
             _gameManager.Page.SetArrowButtons(true, true, false, false);
+        }
+
+        public override void NewGame()
+        {
             _playerPos = new Point(GamesParams.MarginX0, 0.5f).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
                                                                      GamesParams.Margin1.Sub(_padSize.Half()));
 
@@ -48,16 +52,6 @@ namespace MetroRetro.Games
             _ballDir = new Point(1.0f, 0.0f);
 
             base.NewGame();
-        }
-
-        public override void ContinueGame()
-        {
-            _gameManager.Page.SetArrowButtons(true, true, false, false);
-            base.ContinueGame();
-        }
-
-        public override void EndGame()
-        {
         }
 
         public override void Update(DeviceContext context, TargetBase target, DeviceManager deviceManager, Point screenSize, float dt, float elapsedTime)
@@ -86,7 +80,7 @@ namespace MetroRetro.Games
                 {
                     _gameManager.Win(1000);
                     _ballPos = new Point(0.5f, 0.5f);
-                    _ballDir = new Point(-1.0f, 0.0f);
+                    _ballDir = new Point(1.0f, 0.0f);
                 }
             }
 
