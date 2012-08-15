@@ -44,26 +44,26 @@ namespace MetroRetro.Games
             _playerPos = new Point(0.5f, GamesParams.MarginY1).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
                                                                      GamesParams.Margin1.Sub(_padSize.Half()));
 
+            _ballPos = _playerPos.Sub(new Point(0, 0.1f));
+
             _blockPos = new Point[BlocksCountX, BlocksCountY];
             for (var y = 0; y < BlocksCountY; ++y)
             {
                 for (var x = 0; x < BlocksCountX; x++)
                 {
                     var xx = GamesParams.MarginX0 + (GamesParams.MarginX1 - GamesParams.MarginX0) / (BlocksCountX + 1) * (x + 1);
-                    var yy = GamesParams.MarginY0 + (GamesParams.MarginY1 - BottomLinesOfBlocks) / (BlocksCountY + 1) * (y + 1);
+                    var yy = GamesParams.MarginY0 + (GamesParams.MarginY1 - BottomLinesOfBlocks ) / (BlocksCountY + 1) * (y + 1);
 
                     _blockPos[x, y] = new Point(xx, yy).Clamp(GamesParams.Margin0.Add(_blockSize.Half()),
                                                               GamesParams.Margin1.Sub(_blockSize.Half()));
                 }
             }
 
-            _ballPos = new Point(0.5f, 0.5f);
-
             _playerSpd = 0.8f;
-            _ballSpd = 0.13f;
+            _ballSpd = 0.3f;
 
             _playerDir = new Point(0.0f, 0.0f);
-            _ballDir = new Point(1.0f, 0.0f);
+            _ballDir = new Point(0.0f, -1.0f);
 
             base.NewGame();
         }
@@ -77,24 +77,22 @@ namespace MetroRetro.Games
             // Ball moving
             _ballPos = _ballPos.Add(_ballDir.Mul(_ballSpd).Mul(dt));
 
-     /*       // Ball collision with borders
+            // Ball collision with borders
             if (!_ballPos.IsInside(GamesParams.Margin0.Add(_ballSize.Half()), 
                                    GamesParams.Margin1.Sub(_ballSize.Half())))
             {
-                _ballDir.Y = -_ballDir.Y;
+                if (_ballPos.X - GamesParams.MarginX0 < _ballPos.Y - GamesParams.MarginY0 || GamesParams.MarginX1 - _ballPos.X < _ballPos.Y - GamesParams.MarginY0)
+                    _ballDir.X = -_ballDir.X;
+                else
+                    _ballDir.Y = -_ballDir.Y;
 
-                if (_ballPos.X < GamesParams.MarginX0 + 0.001f)
+                if (_ballPos.Y > GamesParams.MarginY1 - 0.01f)
                 {
                     _gameManager.Die();
-                    _ballPos = new Point(0.5f, 0.5f);
-                    _ballDir = new Point(1.0f, 0.0f);
-                }
-
-                if (_ballPos.X > GamesParams.MarginX1 - 0.001f)
-                {
-                    _gameManager.Win(1000);
-                    _ballPos = new Point(0.5f, 0.5f);
-                    _ballDir = new Point(1.0f, 0.0f);
+                    _playerPos = new Point(0.5f, GamesParams.MarginY1).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
+                                                                             GamesParams.Margin1.Sub(_padSize.Half()));
+                    _ballPos = _playerPos.Sub(new Point(0, 0.1f));
+                    _ballDir = new Point(0.0f, -1.0f);
                 }
             }
 
@@ -105,15 +103,15 @@ namespace MetroRetro.Games
             if (_ballPos.IsInside(_playerPos.Sub(_padSize.Half()).Sub(_ballSize.Half()),
                                   _playerPos.Add(_padSize.Half()).Add(_ballSize.Half())))
             {
-                _ballDir.X = 1;
-                _ballDir.Y = _ballPos.Sub(_playerPos).Y / _padSize.Half().Y;
+                _ballDir.Y = -1;
+                _ballDir.X = _ballPos.Sub(_playerPos).X / _padSize.Half().X;
                 _ballDir = _ballDir.Normalise();
 
                 _ballSpd += _ballSpdInc;
 
-                _gameManager.AddPoints(100);
+                //_gameManager.AddPoints(100);
             }
-
+            /*
             // Ball collision with enemy pad
             if (_ballPos.IsInside(_enemyPos.Sub(_padSize.Half()).Sub(_ballSize.Half()),
                                   _enemyPos.Add(_padSize.Half()).Add(_ballSize.Half())))
