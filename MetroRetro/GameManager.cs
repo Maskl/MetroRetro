@@ -33,7 +33,8 @@ namespace MetroRetro
             _games = new Dictionary<GameType, BaseGame>
                          {
                              {GameType.Test, new Test(this, 3)},
-                             {GameType.Pong, new Pong(this, 20)}
+                             {GameType.Pong, new Pong(this, 20)},
+                             {GameType.Arkanoid, new Arkanoid(this, 20)}
                          };
 
             _currentGame = null;
@@ -233,7 +234,7 @@ namespace MetroRetro
                 Page.SetTimeBorderVisibility(Visibility.Visible);
             }
 
-            Start(GameType.Pong);
+            Start(GameType.Arkanoid);
             Unpause();
 
         }
@@ -333,7 +334,8 @@ namespace MetroRetro
     {
         Test = 0,
         Pong = 1,
-        GamesCount = 2
+        Arkanoid = 2,
+        GamesCount = 3
     }
 
     public enum InputType
