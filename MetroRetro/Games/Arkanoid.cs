@@ -6,13 +6,16 @@ namespace MetroRetro.Games
 {
     class Arkanoid : BaseGame
     {
+        private const int BlocksCountX = 7;
+        private const int BlocksCountY = 5;
+        private const float BlockMargin = 0.05f;
+        private const float BottomLinesOfBlocks = 0.5f;
+
         private Point _playerPos;
         private Point _playerDir;
         private float _playerSpd;
 
-        private Point _enemyPos;
-        private Point _enemyDir;
-        private float _enemySpd;
+        private Point[,] _blockPos;
 
         private Point _ballPos;
         private Point _ballDir;
@@ -20,8 +23,11 @@ namespace MetroRetro.Games
 
         private const float _ballSpdInc = 0.01f;
 
-        private readonly Point _padSize = new Point(0.05f, 0.25f);
+        private readonly Point _padSize = new Point(0.20f, 0.03f);
         private readonly Point _ballSize = new Point(0.01f, 0.01f);
+        private readonly Point _blockSize = new Point(
+            (GamesParams.MarginX0 + (GamesParams.MarginX1 - GamesParams.MarginX0) - BlockMargin * (BlocksCountX + 1)) / BlocksCountX,
+            (GamesParams.MarginY0 + (GamesParams.MarginY1 - BottomLinesOfBlocks) - BlockMargin * (BlocksCountY + 1)) / BlocksCountY);
 
         public Arkanoid(GameManager gameManager, float maxTime)
             : base(gameManager, maxTime)
@@ -30,25 +36,33 @@ namespace MetroRetro.Games
 
         public override void SetArrows()
         {
-            _gameManager.Page.SetArrowButtons(true, true, false, false);
+            _gameManager.Page.SetArrowButtons(false, false, true, true);
         }
 
         public override void NewGame()
         {
-            _playerPos = new Point(GamesParams.MarginX0, 0.5f).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
+            _playerPos = new Point(0.5f, GamesParams.MarginY1).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
                                                                      GamesParams.Margin1.Sub(_padSize.Half()));
 
-            _enemyPos = new Point(GamesParams.MarginX1, 0.5f).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
-                                                                    GamesParams.Margin1.Sub(_padSize.Half()));
+            _blockPos = new Point[BlocksCountX, BlocksCountY];
+            for (var y = 0; y < BlocksCountY; ++y)
+            {
+                for (var x = 0; x < BlocksCountX; x++)
+                {
+                    var xx = GamesParams.MarginX0 + (GamesParams.MarginX1 - GamesParams.MarginX0) / (BlocksCountX + 1) * (x + 1);
+                    var yy = GamesParams.MarginY0 + (GamesParams.MarginY1 - BottomLinesOfBlocks) / (BlocksCountY + 1) * (y + 1);
+
+                    _blockPos[x, y] = new Point(xx, yy).Clamp(GamesParams.Margin0.Add(_blockSize.Half()),
+                                                              GamesParams.Margin1.Sub(_blockSize.Half()));
+                }
+            }
 
             _ballPos = new Point(0.5f, 0.5f);
 
             _playerSpd = 0.8f;
-            _enemySpd = 0.3f;
             _ballSpd = 0.13f;
 
             _playerDir = new Point(0.0f, 0.0f);
-            _enemyDir = new Point(0.0f, 0.0f);
             _ballDir = new Point(1.0f, 0.0f);
 
             base.NewGame();
@@ -63,7 +77,7 @@ namespace MetroRetro.Games
             // Ball moving
             _ballPos = _ballPos.Add(_ballDir.Mul(_ballSpd).Mul(dt));
 
-            // Ball collision with borders
+     /*       // Ball collision with borders
             if (!_ballPos.IsInside(GamesParams.Margin0.Add(_ballSize.Half()), 
                                    GamesParams.Margin1.Sub(_ballSize.Half())))
             {
@@ -125,16 +139,18 @@ namespace MetroRetro.Games
 
                 _enemyPos = _enemyPos.Add(_enemyDir.Mul(_enemySpd).Mul(dt)).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
                                                                                   GamesParams.Margin1.Sub(_padSize.Half()));
-            }
+            }*/
 
             // Drawing
+            foreach (var block in _blockPos)
+            {
+                var box = block.ToBox(_blockSize);
+                context.FillRectangle(screenSize.ApplyTo(box), GamesParams.EnemyColor);
+            }
+
             var playerBox = _playerPos.ToBox(_padSize);
-            var enemyBox = _enemyPos.ToBox(_padSize);
             var ballBox = _ballPos.ToBox(_ballSize);
-
             context.FillRectangle(screenSize.ApplyTo(playerBox), GamesParams.PlayerColor);
-            context.FillRectangle(screenSize.ApplyTo(enemyBox), GamesParams.EnemyColor);
-
             context.FillRectangle(screenSize.ApplyTo(ballBox), GamesParams.AdditionalColor);
 
             base.Update(context, target, deviceManager, screenSize, dt, elapsedTime);
@@ -144,12 +160,12 @@ namespace MetroRetro.Games
         {
             switch (key)
             {
-                case InputType.Up:
-                    _playerDir = new Point(0, -1);
+                case InputType.Left:
+                    _playerDir = new Point(-1, 0);
                     break;
 
-                case InputType.Down:
-                    _playerDir = new Point(0, 1);
+                case InputType.Right:
+                    _playerDir = new Point(1, 0);
                     break;
             }
         }
@@ -158,11 +174,11 @@ namespace MetroRetro.Games
         {
             switch (key)
             {
-                case InputType.Up:
+                case InputType.Left:
                     _playerDir = new Point(0, 0);
                     break;
 
-                case InputType.Down:
+                case InputType.Right:
                     _playerDir = new Point(0, 0);
                     break;
             }
