@@ -56,75 +56,80 @@ namespace MetroRetro.Games
 
         public override void Update(DeviceContext context, TargetBase target, DeviceManager deviceManager, Point screenSize, float dt, float elapsedTime)
         {
-            // Player moving
-            _playerPos = _playerPos.Add(_playerDir.Mul(_playerSpd).Mul(dt)).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
-                                                                                  GamesParams.Margin1.Sub(_padSize.Half()));
-                 
-            // Ball moving
-            _ballPos = _ballPos.Add(_ballDir.Mul(_ballSpd).Mul(dt));
-
-            // Ball collision with borders
-            if (!_ballPos.IsInside(GamesParams.Margin0.Add(_ballSize.Half()), 
-                                   GamesParams.Margin1.Sub(_ballSize.Half())))
+            if (AfterStartFreeze)
             {
-                _ballDir.Y = -_ballDir.Y;
+                // Player moving
+                _playerPos =
+                    _playerPos.Add(_playerDir.Mul(_playerSpd).Mul(dt)).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
+                                                                             GamesParams.Margin1.Sub(_padSize.Half()));
 
-                if (_ballPos.X < GamesParams.MarginX0 + 0.001f)
+                // Ball moving
+                _ballPos = _ballPos.Add(_ballDir.Mul(_ballSpd).Mul(dt));
+
+                // Ball collision with borders
+                if (!_ballPos.IsInside(GamesParams.Margin0.Add(_ballSize.Half()),
+                                       GamesParams.Margin1.Sub(_ballSize.Half())))
                 {
-                    _gameManager.Die();
-                    _ballPos = new Point(0.5f, 0.5f);
-                    _ballDir = new Point(1.0f, 0.0f);
+                    _ballDir.Y = -_ballDir.Y;
+
+                    if (_ballPos.X < GamesParams.MarginX0 + 0.001f)
+                    {
+                        _gameManager.Die();
+                        _ballPos = new Point(0.5f, 0.5f);
+                        _ballDir = new Point(1.0f, 0.0f);
+                    }
+
+                    if (_ballPos.X > GamesParams.MarginX1 - 0.001f)
+                    {
+                        _gameManager.Win(1000);
+                        _ballPos = new Point(0.5f, 0.5f);
+                        _ballDir = new Point(1.0f, 0.0f);
+                    }
                 }
 
-                if (_ballPos.X > GamesParams.MarginX1 - 0.001f)
+                _ballPos = _ballPos.Clamp(GamesParams.Margin0.Add(_ballSize.Half()),
+                                          GamesParams.Margin1.Sub(_ballSize.Half()));
+
+                // Ball collision with player pad
+                if (_ballPos.IsInside(_playerPos.Sub(_padSize.Half()).Sub(_ballSize.Half()),
+                                      _playerPos.Add(_padSize.Half()).Add(_ballSize.Half())))
                 {
-                    _gameManager.Win(1000);
-                    _ballPos = new Point(0.5f, 0.5f);
-                    _ballDir = new Point(1.0f, 0.0f);
+                    _ballDir.X = 1;
+                    _ballDir.Y = _ballPos.Sub(_playerPos).Y/_padSize.Half().Y;
+                    _ballDir = _ballDir.Normalise();
+
+                    _ballSpd += _ballSpdInc;
+
+                    _gameManager.AddPoints(100);
                 }
-            }
 
-            _ballPos = _ballPos.Clamp(GamesParams.Margin0.Add(_ballSize.Half()),
-                                      GamesParams.Margin1.Sub(_ballSize.Half()));
+                // Ball collision with enemy pad
+                if (_ballPos.IsInside(_enemyPos.Sub(_padSize.Half()).Sub(_ballSize.Half()),
+                                      _enemyPos.Add(_padSize.Half()).Add(_ballSize.Half())))
+                {
+                    _ballDir.X = -1;
+                    _ballDir.Y = _ballPos.Sub(_enemyPos).Y/_padSize.Half().Y;
+                    _ballDir = _ballDir.Normalise();
 
-            // Ball collision with player pad
-            if (_ballPos.IsInside(_playerPos.Sub(_padSize.Half()).Sub(_ballSize.Half()),
-                                  _playerPos.Add(_padSize.Half()).Add(_ballSize.Half())))
-            {
-                _ballDir.X = 1;
-                _ballDir.Y = _ballPos.Sub(_playerPos).Y / _padSize.Half().Y;
-                _ballDir = _ballDir.Normalise();
+                    _ballSpd += _ballSpdInc;
+                }
 
-                _ballSpd += _ballSpdInc;
-
-                _gameManager.AddPoints(100);
-            }
-
-            // Ball collision with enemy pad
-            if (_ballPos.IsInside(_enemyPos.Sub(_padSize.Half()).Sub(_ballSize.Half()),
-                                  _enemyPos.Add(_padSize.Half()).Add(_ballSize.Half())))
-            {
-                _ballDir.X = -1;
-                _ballDir.Y = _ballPos.Sub(_enemyPos).Y / _padSize.Half().Y;
-                _ballDir = _ballDir.Normalise();
-
-                _ballSpd += _ballSpdInc;
-            }
-
-            // Enemy moving
-            if (Math.Abs(_ballPos.Y - _enemyPos.Y) <_padSize.Div(3).Y)
-            {
-                _enemyDir.Y = 0;
-            }
-            else 
-            {
-                if (_ballPos.Y > _enemyPos.Y)
-                    _enemyDir.Y = 1;
+                // Enemy moving
+                if (Math.Abs(_ballPos.Y - _enemyPos.Y) < _padSize.Div(3).Y)
+                {
+                    _enemyDir.Y = 0;
+                }
                 else
-                    _enemyDir.Y = -1;
+                {
+                    if (_ballPos.Y > _enemyPos.Y)
+                        _enemyDir.Y = 1;
+                    else
+                        _enemyDir.Y = -1;
 
-                _enemyPos = _enemyPos.Add(_enemyDir.Mul(_enemySpd).Mul(dt)).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
-                                                                                  GamesParams.Margin1.Sub(_padSize.Half()));
+                    _enemyPos =
+                        _enemyPos.Add(_enemyDir.Mul(_enemySpd).Mul(dt)).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
+                                                                              GamesParams.Margin1.Sub(_padSize.Half()));
+                }
             }
 
             // Drawing

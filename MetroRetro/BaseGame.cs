@@ -9,6 +9,7 @@ namespace MetroRetro
         protected GameManager _gameManager;
         private float _gameTime;
         private readonly float _gameMaxTime;
+        protected bool AfterStartFreeze = false;
 
         protected BaseGame(GameManager gameManager, float gameMaxTime)
         {
@@ -28,12 +29,14 @@ namespace MetroRetro
         {
             SetArrows();
             _gameTime = 0;
+            AfterStartFreeze = true;
         }
 
         public virtual void ContinueGame()
         {
             SetArrows();
             _gameTime = 0;
+            AfterStartFreeze = false;
         }
 
         public virtual void EndGame()
@@ -49,12 +52,16 @@ namespace MetroRetro
             if (!_gameManager.IsTraining)
             {
                 const float u = 1.00f;
-                if (_gameTime < u)
+                if (_gameTime < u && !AfterStartFreeze)
                 {
                     var op = 1 - _gameTime / u;
                     var hideBrush = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White,
                                                         new BrushProperties { Opacity = op });
                     context.FillRectangle(screenSize.ApplyTo(new RectangleF(0, 0, 1, 1)), hideBrush);
+                }
+                else
+                {
+                    AfterStartFreeze = true;
                 }
 
                 if (_gameTime > _gameMaxTime - u)
