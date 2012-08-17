@@ -113,6 +113,9 @@ namespace MetroRetro.Games
                 context.FillRectangle(screenSize.ApplyTo(box), GamesParams.PlayerColor);
             }
 
+            var headBox = _snake.Last().ToBox(_snakePartSize.Mul(0.5f));
+            context.FillRectangle(screenSize.ApplyTo(headBox), GamesParams.AdditionalColor);
+
             var appleBox = _apple.ToBox(_appleSize);
             context.FillRectangle(screenSize.ApplyTo(appleBox), GamesParams.AdditionalColor);
             base.Update(context, target, deviceManager, screenSize, dt, elapsedTime);
