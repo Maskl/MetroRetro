@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="GamesParams.cs" />
     <Compile Include="Games\Arkanoid.cs" />
+    <Compile Include="Games\Snake.cs" />
     <Compile Include="Games\Test.cs" />
     <Compile Include="BaseGame.cs" />
     <Compile Include="GameManager.cs" />

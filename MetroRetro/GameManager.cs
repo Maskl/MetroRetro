@@ -34,7 +34,8 @@ namespace MetroRetro
                          {
                              {GameType.Test, new Test(this, 3)},
                              {GameType.Pong, new Pong(this, 20)},
-                             {GameType.Arkanoid, new Arkanoid(this, 20)}
+                             {GameType.Arkanoid, new Arkanoid(this, 20)},
+                             {GameType.Snake, new Snake(this, 20)}
                          };
 
             _currentGame = null;
@@ -234,7 +235,7 @@ namespace MetroRetro
                 Page.SetTimeBorderVisibility(Visibility.Visible);
             }
 
-            Start(GameType.Arkanoid);
+            Start(GameType.GamesCount - 1);
             Unpause();
 
         }
@@ -335,7 +336,8 @@ namespace MetroRetro
         Test = 0,
         Pong = 1,
         Arkanoid = 2,
-        GamesCount = 3
+        Snake = 3,
+        GamesCount = 4
     }
 
     public enum InputType
