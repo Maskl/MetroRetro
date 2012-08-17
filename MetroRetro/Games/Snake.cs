@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommonDX;
 using SharpDX.Direct2D1;
 
@@ -56,6 +57,24 @@ namespace MetroRetro.Games
                 var pp = s0;
                 while (lp-- > 0)
                 {
+                    // Collision with borders
+                    if (!pp.IsInside(GamesParams.Margin0.Add(_snakePartSize.Half()),
+                                     GamesParams.Margin1.Sub(_snakePartSize.Half())))
+                    {
+                        NewGame();
+                        _gameManager.Die();
+                        return;
+                    }
+
+                    // Self collision
+                    var mm = _snake.Count - 3;
+                    if (_snake.TakeWhile(snakePart => --mm > 0).Any(snakePart => snakePart.Sub(pp).Length() < _snakePartSize.X / 3 * 2))
+                    {
+                        NewGame();
+                        _gameManager.Die();
+                        return;
+                    }
+
                     _snake.Add(new Point(pp.X, pp.Y));
                     pp = pp.Add(it);
                     _sumDt = 0;
