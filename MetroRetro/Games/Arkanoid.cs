@@ -75,6 +75,7 @@ namespace MetroRetro.Games
                                                                                   GamesParams.Margin1.Sub(_padSize.Half()));
                  
             // Ball moving
+            var oldBallPos = _ballPos;
             _ballPos = _ballPos.Add(_ballDir.Mul(_ballSpd).Mul(dt));
 
             // Ball collision with borders
@@ -108,42 +109,43 @@ namespace MetroRetro.Games
                 _ballDir = _ballDir.Normalise();
 
                 _ballSpd += _ballSpdInc;
-
-                //_gameManager.AddPoints(100);
-            }
-            /*
-            // Ball collision with enemy pad
-            if (_ballPos.IsInside(_enemyPos.Sub(_padSize.Half()).Sub(_ballSize.Half()),
-                                  _enemyPos.Add(_padSize.Half()).Add(_ballSize.Half())))
-            {
-                _ballDir.X = -1;
-                _ballDir.Y = _ballPos.Sub(_enemyPos).Y / _padSize.Half().Y;
-                _ballDir = _ballDir.Normalise();
-
-                _ballSpd += _ballSpdInc;
             }
 
-            // Enemy moving
-            if (Math.Abs(_ballPos.Y - _enemyPos.Y) <_padSize.Div(3).Y)
-            {
-                _enemyDir.Y = 0;
-            }
-            else 
-            {
-                if (_ballPos.Y > _enemyPos.Y)
-                    _enemyDir.Y = 1;
-                else
-                    _enemyDir.Y = -1;
-
-                _enemyPos = _enemyPos.Add(_enemyDir.Mul(_enemySpd).Mul(dt)).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
-                                                                                  GamesParams.Margin1.Sub(_padSize.Half()));
-            }*/
-
-            // Drawing
+            // Ball collision with player pad
             foreach (var block in _blockPos)
             {
+                if (_ballPos.IsInside(block.Sub(_blockSize.Half()).Sub(_ballSize.Half()),
+                                      block.Add(_blockSize.Half()).Add(_ballSize.Half())))
+                {
+                    if (oldBallPos.X < block.Sub(_blockSize.Half()).Sub(_ballSize.Half()).X ||
+                        oldBallPos.X > block.Add(_blockSize.Half()).Add(_ballSize.Half()).X)
+                        _ballDir.X = -_ballDir.X;
+                    else
+                        _ballDir.Y = -_ballDir.Y;
+
+                    block.X = -100;
+                    block.Y = -100;
+
+                    _gameManager.AddPoints(100);
+                }
+            }
+            
+            // Drawing
+            var anyBlock = false;
+            foreach (var block in _blockPos)
+            {
+                if (block.X < 0)
+                    continue;
+
+                anyBlock = true;
                 var box = block.ToBox(_blockSize);
                 context.FillRectangle(screenSize.ApplyTo(box), GamesParams.EnemyColor);
+            }
+
+            if (!anyBlock)
+            {
+                NewGame();
+                _gameManager.Win(5000);
             }
 
             var playerBox = _playerPos.ToBox(_padSize);
