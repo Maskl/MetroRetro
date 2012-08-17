@@ -100,7 +100,7 @@ namespace MetroRetro
             return l == 0 ? new Point(0, 0) : new Point(X / l, Y / l);
         }
 
-        private float Length()
+        public float Length()
         {
             return (float) Math.Sqrt(X*X + Y*Y);
         }
