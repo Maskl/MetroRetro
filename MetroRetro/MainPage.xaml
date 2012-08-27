@@ -43,6 +43,7 @@
             PointerEntered="InputButtonPointerOver"
             PointerExited="InputButtonPointerOut">
             <TextBlock
+                x:Name="UpArrowButtonLabel"
                 Text="↑"
                 FontFamily="Segoe UI"
                 FontSize="32"
@@ -67,6 +68,7 @@
             PointerEntered="InputButtonPointerOver"
             PointerExited="InputButtonPointerOut">
             <TextBlock
+                x:Name="DownArrowButtonLabel"
                 Text="↓"
                 FontFamily="Segoe UI"
                 FontSize="32"
@@ -91,6 +93,7 @@
             PointerEntered="InputButtonPointerOver"
             PointerExited="InputButtonPointerOut">
             <TextBlock
+                x:Name="LeftArrowButtonLabel"
                 Text="←"
                 FontFamily="Segoe UI"
                 FontSize="32"
@@ -115,6 +118,7 @@
             PointerEntered="InputButtonPointerOver"
             PointerExited="InputButtonPointerOut">
             <TextBlock
+                x:Name="RightArrowButtonLabel"
                 Text="→"
                 FontFamily="Segoe UI"
                 FontSize="32"

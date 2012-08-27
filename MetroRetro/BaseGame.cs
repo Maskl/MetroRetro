@@ -28,6 +28,7 @@ namespace MetroRetro
         public virtual void NewGame()
         {
             SetArrows();
+            SetArrowsLabels();
             _gameTime = 0;
             AfterStartFreeze = true;
         }
@@ -35,6 +36,7 @@ namespace MetroRetro
         public virtual void ContinueGame()
         {
             SetArrows();
+            SetArrowsLabels();
             _gameTime = 0;
             AfterStartFreeze = false;
         }
@@ -85,6 +87,11 @@ namespace MetroRetro
         public virtual void SetArrows()
         {
             _gameManager.Page.SetArrowButtons(true, true, true, true);
+        }
+
+        public virtual void SetArrowsLabels()
+        {
+            _gameManager.Page.SetArrowButtonsLabels();
         }
 
         public abstract void KeyPressed(InputType key);

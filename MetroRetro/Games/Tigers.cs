@@ -35,6 +35,11 @@ namespace MetroRetro.Games
             _gameManager.Page.SetArrowButtons(true, false, true, true);
         }
 
+        public override void SetArrowsLabels()
+        {
+            _gameManager.Page.SetArrowButtonsLabels(up: "≜");
+        }
+
         readonly Random _r = new Random();
         private bool _isShootButtonPressed;
         private float _timeToNextPossibleShoot;
@@ -192,6 +197,7 @@ namespace MetroRetro.Games
                     break;
 
                 case InputType.Up:
+                case InputType.Space:
                     _isShootButtonPressed = true;
                     break;
             }
@@ -210,6 +216,7 @@ namespace MetroRetro.Games
                     break;
                     
                 case InputType.Up:
+                case InputType.Space:
                     _isShootButtonPressed = false;
                     break;
             }

@@ -189,6 +189,9 @@ namespace MetroRetro
 
                 case VirtualKey.Up:
                 case VirtualKey.W:
+                case VirtualKey.Space:
+                case VirtualKey.Z:
+                case VirtualKey.X:
                     return InputType.Up;
 
                 case VirtualKey.Down:
@@ -258,6 +261,14 @@ namespace MetroRetro
             {
                 ButtonPressedOrReleased(_buttonsDictionary[elem.Key], InputState.Out);
             }
+        }
+
+        public void SetArrowButtonsLabels(string up = "↑", string down = "↓", string left = "←", string right = "→")
+        {
+            UpArrowButtonLabel.Text = up;
+            DownArrowButtonLabel.Text = down;
+            LeftArrowButtonLabel.Text = left;
+            RightArrowButtonLabel.Text = right;
         }
     }
 }
