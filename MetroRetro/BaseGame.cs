@@ -91,7 +91,7 @@ namespace MetroRetro
 
         public virtual void SetArrowsLabels()
         {
-            _gameManager.Page.SetArrowButtonsLabels();
+           // _gameManager.Page.SetArrowButtonsLabels();
         }
 
         public abstract void KeyPressed(InputType key);

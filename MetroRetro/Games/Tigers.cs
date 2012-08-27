@@ -10,7 +10,7 @@ namespace MetroRetro.Games
     {
         private const float PlayerSpd = 0.8f;
         private const float EnemySpd = 0.1f;
-        private const float BulletSpd = 0.9f;
+        private const float BulletSpd = 0.5f;
 
         private readonly Point _enemyDir = new Point(0.0f, 1.0f);
         private readonly Point _bulletDir = new Point(0.0f, -1.0f);
@@ -32,18 +32,18 @@ namespace MetroRetro.Games
 
         public override void SetArrows()
         {
-            _gameManager.Page.SetArrowButtons(true, false, true, true);
+            _gameManager.Page.SetArrowButtons(false, false, true, true);
         }
 
         public override void SetArrowsLabels()
         {
-            _gameManager.Page.SetArrowButtonsLabels(up: "≜");
+          //  _gameManager.Page.SetArrowButtonsLabels(up: "≜");
         }
 
         readonly Random _r = new Random();
         private bool _isShootButtonPressed;
         private float _timeToNextPossibleShoot;
-        private const float ShootInterval = 0.3f;
+        private const float ShootInterval = 0.5f;
 
         private void AddEnemy(int id = -1)
         {
@@ -51,11 +51,11 @@ namespace MetroRetro.Games
                 (float) _r.NextDouble() * (GamesParams.MarginX1 - GamesParams.MarginX0 - _enemySize.X) + GamesParams.MarginX0 + _enemySize.X / 2, 
                 (float) _r.NextDouble() * 2 - 2.1f);
 
-            if (_enemyPos.Count < 5 && p.Y < GamesParams.MarginY0 - _enemySize.Y / 2)
+            if (_enemyPos.Count < 5 && p.Y < GamesParams.MarginY0 - _enemySize.Y / 2 - 1)
                 p.Y += 1;
 
-            if (_enemyPos.Count < 3 && p.Y < GamesParams.MarginY0 - _enemySize.Y / 2)
-                p.Y += 1;
+            if (_enemyPos.Count < 3 && p.Y < GamesParams.MarginY0 - _enemySize.Y / 2 - 0.5f)
+                p.Y += 0.5f;
 
             if (_enemyPos.Count < 1)
                 p.Y = GamesParams.MarginY0 - _enemySize.Y / 2;
@@ -80,7 +80,7 @@ namespace MetroRetro.Games
             _bulletPos = new List<Point>();
             _playerDir = new Point(0.0f, 0.0f);
 
-            _isShootButtonPressed = false;
+            _isShootButtonPressed = true; //! false;
             _timeToNextPossibleShoot = 0.0f;
             base.NewGame();
         }
@@ -142,7 +142,6 @@ namespace MetroRetro.Games
                                             GamesParams.Margin1.Add(_bulletSize.Half())))
                     {
                         _bulletPos.RemoveAt(i);
-                        AddEnemy();
                     }
 
                     // Bullet collision with enemies
@@ -155,7 +154,7 @@ namespace MetroRetro.Games
                             _bulletPos.RemoveAt(i);
                             AddEnemy(e);
                             AddEnemy();
-                            _gameManager.AddPoints(25);
+                            _gameManager.AddPoints(50);
                             break;
                         }
                     }
@@ -205,10 +204,10 @@ namespace MetroRetro.Games
                     _playerDir = new Point(1, 0);
                     break;
 
-                case InputType.Up:
-                case InputType.Space:
-                    _isShootButtonPressed = true;
-                    break;
+            //    case InputType.Up:
+            //    case InputType.Space:
+            //        _isShootButtonPressed = true;
+            //        break;
             }
         }
 
@@ -224,10 +223,10 @@ namespace MetroRetro.Games
                     _playerDir = new Point(0, 0);
                     break;
                     
-                case InputType.Up:
-                case InputType.Space:
-                    _isShootButtonPressed = false;
-                    break;
+            //    case InputType.Up:
+            //    case InputType.Space:
+            //        _isShootButtonPressed = false;
+           //         break;
             }
         }
     }

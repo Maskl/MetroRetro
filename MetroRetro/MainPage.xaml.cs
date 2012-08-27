@@ -189,9 +189,6 @@ namespace MetroRetro
 
                 case VirtualKey.Up:
                 case VirtualKey.W:
-                case VirtualKey.Space:
-                case VirtualKey.Z:
-                case VirtualKey.X:
                     return InputType.Up;
 
                 case VirtualKey.Down:

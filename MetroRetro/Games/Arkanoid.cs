@@ -151,7 +151,7 @@ namespace MetroRetro.Games
             if (!anyBlock)
             {
                 NewGame();
-                _gameManager.Win(5000);
+                _gameManager.Win(3000);
             }
 
             var playerBox = _playerPos.ToBox(_padSize);

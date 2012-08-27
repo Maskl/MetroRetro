@@ -74,16 +74,17 @@ namespace MetroRetro.Games
 
                     if (_ballPos.X < GamesParams.MarginX0 + 0.001f)
                     {
+                        NewGame();
                         _gameManager.Die();
-                        _ballPos = new Point(0.5f, 0.5f);
-                        _ballDir = new Point(1.0f, 0.0f);
+                        return;
                     }
 
                     if (_ballPos.X > GamesParams.MarginX1 - 0.001f)
                     {
-                        _gameManager.Win(1000);
+                        _gameManager.Win(500);
                         _ballPos = new Point(0.5f, 0.5f);
                         _ballDir = new Point(1.0f, 0.0f);
+                        return;
                     }
                 }
 
@@ -100,7 +101,7 @@ namespace MetroRetro.Games
 
                     _ballSpd += _ballSpdInc;
 
-                    _gameManager.AddPoints(100);
+                    _gameManager.AddPoints(75);
                 }
 
                 // Ball collision with enemy pad

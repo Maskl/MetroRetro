@@ -83,6 +83,7 @@ namespace MetroRetro.Games
                     _canWin -= dt;
                     if (_canWin < 0)
                     {
+                        _canWin = 1000;
                         _gameManager.Win(300);
                         return;
                     }
