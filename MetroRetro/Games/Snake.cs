@@ -101,8 +101,6 @@ namespace MetroRetro.Games
                     {
                         _snake.RemoveAt(0);
                     }
-
-                    Debug(_snake.Count.ToString());
                 }
             }
 

@@ -80,7 +80,7 @@ namespace MetroRetro
                 _gameManager.RedrawPointsAndLifes();
 
                 if (_gameTime > _gameMaxTime)
-                    _gameManager.Interrupt();
+                    _gameManager.Win(100);
             }
         }
 

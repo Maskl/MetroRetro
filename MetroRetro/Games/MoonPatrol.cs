@@ -22,6 +22,8 @@ namespace MetroRetro.Games
         private readonly Point _playerSize = new Point(0.1f, 0.06f);
         private Point _holeSize = new Point(0.06f, 0.08f);
 
+        private float _canWin;
+
 
         private Random _r = new Random();
         private float _timeToNextPossibleJump;
@@ -48,7 +50,15 @@ namespace MetroRetro.Games
             _holeSpd = 0.2f;
             _timeToNextPossibleJump = 0;
 
+            _canWin = 1000;
+
             base.NewGame();
+        }
+
+        public override void ContinueGame()
+        {
+            _canWin = 1000;
+            base.ContinueGame();
         }
 
         public override void Update(DeviceContext context, TargetBase target, DeviceManager deviceManager, Point screenSize, float dt, float elapsedTime)
@@ -66,12 +76,17 @@ namespace MetroRetro.Games
                     {
                         _playerPos.Y = GroundY - _playerSize.Y / 2;
                         _jumpTimer = -1;
-                        _gameManager.AddPoints(200);
-                        _gameManager.Interrupt();
                     }
                 }
-
-                Debug(_jumpTimer.ToString());
+                else
+                {
+                    _canWin -= dt;
+                    if (_canWin < 0)
+                    {
+                        _gameManager.Win(300);
+                        return;
+                    }
+                }
 
                 // Hole moving
                 _holePos = _holePos.Add(_holeDir.Mul(_holeSpd).Mul(dt));
@@ -79,14 +94,16 @@ namespace MetroRetro.Games
                 {
                     AddNewObstacle();
                 }
+                if (_holePos.X < _playerPos.X && _canWin > 100)
+                    _canWin = 0.5f;
 
                 // Ball collision with player pad
                 if (_holePos.IsInside(_playerPos.Sub(_playerSize.Half()).Sub(_holeSize.Half()),
                                       _playerPos.Add(_playerSize.Half()).Add(_holeSize.Half())))
                 {
-                    _gameManager.Die();
                     NewGame();
-                    _gameManager.Interrupt();
+                    _gameManager.Die();
+                    return;
                 }
             }
 
@@ -139,7 +156,7 @@ namespace MetroRetro.Games
             switch (key)
             {
                 case InputType.Up:
-                    if (_timeToNextPossibleJump > 0)
+                    if (_timeToNextPossibleJump > 0 || _jumpTimer >= 0)
                         break;
 
                     _jumpTimer = 0.0f;

@@ -18,7 +18,7 @@ namespace MetroRetro.Games
         private Point _ballDir;
         private float _ballSpd;
 
-        private const float _ballSpdInc = 0.01f;
+        private const float _ballSpdInc = 0.005f;
 
         private readonly Point _padSize = new Point(0.05f, 0.25f);
         private readonly Point _ballSize = new Point(0.01f, 0.01f);

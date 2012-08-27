@@ -32,10 +32,10 @@ namespace MetroRetro
 
             _games = new Dictionary<GameType, BaseGame>
                          {
-                             {GameType.Pong, new Pong(this, 20)},
-                             {GameType.Arkanoid, new Arkanoid(this, 20)},
+                             {GameType.Pong, new Pong(this, 15)},
+                             {GameType.Arkanoid, new Arkanoid(this, 15)},
                              {GameType.Snake, new Snake(this, 20)},
-                             {GameType.Tigers, new Tigers(this, 20)},
+                             {GameType.Tigers, new Tigers(this, 15)},
                              {GameType.MoonPatrol, new MoonPatrol(this, 20)}
                          };
 
@@ -236,9 +236,9 @@ namespace MetroRetro
                 Page.SetTimeBorderVisibility(Visibility.Visible);
             }
 
-            Start(GameType.GamesCount - 1);
+            var rand = new Random();
+            Start((GameType)rand.Next((int)GameType.GamesCount));
             Unpause();
-
         }
 
         public void StartNextGame()
@@ -281,11 +281,6 @@ namespace MetroRetro
                 if (!IsTraining)
                     StartNextGame();
             }
-        }
-
-        public void Interrupt()
-        {
-            StartNextGame();
         }
 
         public void RedrawPointsAndLifes()

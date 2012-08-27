@@ -256,6 +256,7 @@
     <!-- Debug text -->
     <TextBlock
         x:Name="DebugText"
+        Visibility="Collapsed"
         Text="ok"
         Width="700"
         Height="294"

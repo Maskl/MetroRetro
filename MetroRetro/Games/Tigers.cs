@@ -9,7 +9,7 @@ namespace MetroRetro.Games
     class Tigers : BaseGame
     {
         private const float PlayerSpd = 0.8f;
-        private const float EnemySpd = 0.15f;
+        private const float EnemySpd = 0.1f;
         private const float BulletSpd = 0.9f;
 
         private readonly Point _enemyDir = new Point(0.0f, 1.0f);
@@ -51,8 +51,14 @@ namespace MetroRetro.Games
                 (float) _r.NextDouble() * (GamesParams.MarginX1 - GamesParams.MarginX0 - _enemySize.X) + GamesParams.MarginX0 + _enemySize.X / 2, 
                 (float) _r.NextDouble() * 2 - 2.1f);
 
-            if (_enemyPos.Count < 3 && p.Y < -1.1)
+            if (_enemyPos.Count < 5 && p.Y < GamesParams.MarginY0 - _enemySize.Y / 2)
                 p.Y += 1;
+
+            if (_enemyPos.Count < 3 && p.Y < GamesParams.MarginY0 - _enemySize.Y / 2)
+                p.Y += 1;
+
+            if (_enemyPos.Count < 1)
+                p.Y = GamesParams.MarginY0 - _enemySize.Y / 2;
 
             if (id >= 0)
                 _enemyPos[id] = p;
