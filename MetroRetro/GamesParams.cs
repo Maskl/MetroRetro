@@ -1,6 +1,9 @@
 ﻿using CommonDX;
 using SharpDX;
 using SharpDX.Direct2D1;
+using Windows.UI;
+using Colors = SharpDX.Colors;
+
 namespace MetroRetro
 {
     static public class GamesParams
@@ -21,11 +24,11 @@ namespace MetroRetro
         static public Color4 BackgroundColorNormal = Colors.Black;
         public static void CreateColors(DeviceManager deviceManager)
         {
-            PlayerColor = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.Green);
-            EnemyColor = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.Red);
-            AdditionalColor = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.Yellow);
-            BackgroundColor = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.Black);
-            ObstaclesColor = new SolidColorBrush(deviceManager.ContextDirect2D, Colors.White);
+            PlayerColor = new SolidColorBrush(deviceManager.ContextDirect2D, new Color4(0.0f, 0.8f, 0.0f, 1.0f));
+            EnemyColor = new SolidColorBrush(deviceManager.ContextDirect2D, new Color4(0.8f, 0.0f, 0.0f, 1.0f));
+            AdditionalColor = new SolidColorBrush(deviceManager.ContextDirect2D, new Color4(0.8f, 0.8f, 0.0f, 1.0f));
+            BackgroundColor = new SolidColorBrush(deviceManager.ContextDirect2D, new Color4(0.0f, 0.0f, 0.0f, 1.0f));
+            ObstaclesColor = new SolidColorBrush(deviceManager.ContextDirect2D, new Color4(1.0f, 1.0f, 1.0f, 1.0f));
         }
     }
 }

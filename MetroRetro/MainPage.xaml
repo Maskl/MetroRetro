@@ -209,7 +209,7 @@
         Opacity="0">
         <Rectangle
             x:Name="TimeRectangle"
-            Fill="#FF000088"
+            Fill="#FF004400"
             Margin="0,0,0,-2"
             Stroke="Black"
             Canvas.ZIndex="-10"
