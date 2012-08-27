@@ -125,8 +125,9 @@ namespace MetroRetro.Games
                     if (enemyPos.IsInside(_playerPos.Sub(_playerSize.Half()).Sub(_playerSize.Half()),
                                           _playerPos.Add(_playerSize.Half()).Add(_playerSize.Half())))
                     {
-                        _gameManager.Die();
                         NewGame();
+                        _gameManager.Die();
+                        return;
                     }
                 }
 

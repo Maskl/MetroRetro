@@ -93,12 +93,13 @@ namespace MetroRetro.Games
 
                     if (_ballPos.Y > GamesParams.MarginY1 - 0.01f)
                     {
-                        _gameManager.Die();
                         _playerPos =
                             new Point(0.5f, GamesParams.MarginY1).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
                                                                         GamesParams.Margin1.Sub(_padSize.Half()));
                         _ballPos = _playerPos.Sub(new Point(0, 0.1f));
                         _ballDir = new Point(0.0f, -1.0f);
+                        _gameManager.Die();
+                        return;
                     }
                 }
 
@@ -152,6 +153,7 @@ namespace MetroRetro.Games
             {
                 NewGame();
                 _gameManager.Win(3000);
+                return;
             }
 
             var playerBox = _playerPos.ToBox(_padSize);
