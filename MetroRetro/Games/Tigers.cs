@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CommonDX;
 using SharpDX.Direct2D1;
 
@@ -6,28 +8,22 @@ namespace MetroRetro.Games
 {
     class Tigers : BaseGame
     {
-        private const int BlocksCountX = 7;
-        private const int BlocksCountY = 5;
-        private const float BlockMargin = 0.05f;
-        private const float BottomLinesOfBlocks = 0.5f;
+        private const float PlayerSpd = 0.8f;
+        private const float EnemySpd = 0.15f;
+        private const float BulletSpd = 0.9f;
+
+        private readonly Point _enemyDir = new Point(0.0f, 1.0f);
+        private readonly Point _bulletDir = new Point(0.0f, -1.0f);
+
+        private List<Point> _enemyPos;
+        private List<Point> _bulletPos; 
 
         private Point _playerPos;
         private Point _playerDir;
-        private float _playerSpd;
 
-        private Point[,] _blockPos;
-
-        private Point _ballPos;
-        private Point _ballDir;
-        private float _ballSpd;
-
-        private const float _ballSpdInc = 0.01f;
-
-        private readonly Point _padSize = new Point(0.20f, 0.03f);
-        private readonly Point _ballSize = new Point(0.01f, 0.01f);
-        private readonly Point _blockSize = new Point(
-            (GamesParams.MarginX0 + (GamesParams.MarginX1 - GamesParams.MarginX0) - BlockMargin * (BlocksCountX + 1)) / BlocksCountX,
-            (GamesParams.MarginY0 + (GamesParams.MarginY1 - BottomLinesOfBlocks) - BlockMargin * (BlocksCountY + 1)) / BlocksCountY);
+        private readonly Point _playerSize = new Point(0.05f, 0.05f);
+        private readonly Point _bulletSize = new Point(0.01f, 0.01f);
+        private readonly Point _enemySize = new Point(0.05f, 0.05f);
 
         public Tigers(GameManager gameManager, float maxTime)
             : base(gameManager, maxTime)
@@ -36,35 +32,42 @@ namespace MetroRetro.Games
 
         public override void SetArrows()
         {
-            _gameManager.Page.SetArrowButtons(false, false, true, true);
+            _gameManager.Page.SetArrowButtons(true, false, true, true);
+        }
+
+        readonly Random _r = new Random();
+        private bool _isShootButtonPressed;
+        private float _timeToNextPossibleShoot;
+        private const float ShootInterval = 0.3f;
+
+        private void AddEnemy(int id = -1)
+        {
+            var p = new Point(
+                (float) _r.NextDouble() * (GamesParams.MarginX1 - GamesParams.MarginX0 - _enemySize.X) + GamesParams.MarginX0 + _enemySize.X / 2, 
+                (float) _r.NextDouble() * 2 - 2.1f);
+
+            if (id >= 0)
+                _enemyPos[id] = p;
+            else
+                _enemyPos.Add(p);
         }
 
         public override void NewGame()
         {
-            _playerPos = new Point(0.5f, GamesParams.MarginY1).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
-                                                                     GamesParams.Margin1.Sub(_padSize.Half()));
+            _playerPos = new Point(0.5f, GamesParams.MarginY1).Clamp(GamesParams.Margin0.Add(_playerSize.Half()),
+                                                                     GamesParams.Margin1.Sub(_playerSize.Half()));
 
-            _ballPos = _playerPos.Sub(new Point(0, 0.1f));
-
-            _blockPos = new Point[BlocksCountX, BlocksCountY];
-            for (var y = 0; y < BlocksCountY; ++y)
+            _enemyPos = new List<Point>();
+            for (var i = 0; i < 2; i++)
             {
-                for (var x = 0; x < BlocksCountX; x++)
-                {
-                    var xx = GamesParams.MarginX0 + (GamesParams.MarginX1 - GamesParams.MarginX0) / (BlocksCountX + 1) * (x + 1);
-                    var yy = GamesParams.MarginY0 + (GamesParams.MarginY1 - BottomLinesOfBlocks ) / (BlocksCountY + 1) * (y + 1);
-
-                    _blockPos[x, y] = new Point(xx, yy).Clamp(GamesParams.Margin0.Add(_blockSize.Half()),
-                                                              GamesParams.Margin1.Sub(_blockSize.Half()));
-                }
+                AddEnemy();
             }
 
-            _playerSpd = 0.8f;
-            _ballSpd = 0.3f;
-
+            _bulletPos = new List<Point>();
             _playerDir = new Point(0.0f, 0.0f);
-            _ballDir = new Point(0.0f, -1.0f);
 
+            _isShootButtonPressed = false;
+            _timeToNextPossibleShoot = 0.0f;
             base.NewGame();
         }
 
@@ -72,92 +75,106 @@ namespace MetroRetro.Games
         {
             if (AfterStartFreeze)
             {
+                _timeToNextPossibleShoot -= dt;
+                if (_isShootButtonPressed && _timeToNextPossibleShoot <= 0)
+                {
+                    var p = _playerPos.Sub(new Point(0, 0.01f));
+                    _bulletPos.Add(p);
+
+                    _timeToNextPossibleShoot = ShootInterval;
+                }
+
+
                 // Player moving
                 _playerPos =
-                    _playerPos.Add(_playerDir.Mul(_playerSpd).Mul(dt)).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
-                                                                             GamesParams.Margin1.Sub(_padSize.Half()));
-
-                // Ball moving
-                var oldBallPos = _ballPos;
-                _ballPos = _ballPos.Add(_ballDir.Mul(_ballSpd).Mul(dt));
-
-                // Ball collision with borders
-                if (!_ballPos.IsInside(GamesParams.Margin0.Add(_ballSize.Half()),
-                                       GamesParams.Margin1.Sub(_ballSize.Half())))
+                    _playerPos.Add(_playerDir.Mul(PlayerSpd).Mul(dt)).Clamp(GamesParams.Margin0.Add(_playerSize.Half()), 
+                                                                            GamesParams.Margin1.Sub(_playerSize.Half()));
+                        
+                // Enemies
+                for (var e = 0; e < _enemyPos.Count; ++e)
                 {
-                    if (_ballPos.X - GamesParams.MarginX0 < _ballPos.Y - GamesParams.MarginY0 ||
-                        GamesParams.MarginX1 - _ballPos.X < _ballPos.Y - GamesParams.MarginY0)
-                        _ballDir.X = -_ballDir.X;
-                    else
-                        _ballDir.Y = -_ballDir.Y;
+                    var enemyPos = _enemyPos[e];
 
-                    if (_ballPos.Y > GamesParams.MarginY1 - 0.01f)
+                    // Enemy reach bottom line
+                    _enemyPos[e] = enemyPos.Add(_enemyDir.Mul(EnemySpd).Mul(dt));
+                    enemyPos = _enemyPos[e];
+
+                    if (enemyPos.IsInside(GamesParams.Margin0.Sub(_enemySize.Half()).Add(new Point(0, 1)),
+                                          GamesParams.Margin1.Add(_enemySize.Half()).Add(new Point(0, 1))))
+                    {
+                        AddEnemy(e);
+                        AddEnemy();
+                        AddEnemy();
+                    }
+
+                    // Enemy collision with player
+                    if (enemyPos.IsInside(_playerPos.Sub(_playerSize.Half()).Sub(_playerSize.Half()),
+                                          _playerPos.Add(_playerSize.Half()).Add(_playerSize.Half())))
                     {
                         _gameManager.Die();
-                        _playerPos =
-                            new Point(0.5f, GamesParams.MarginY1).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
-                                                                        GamesParams.Margin1.Sub(_padSize.Half()));
-                        _ballPos = _playerPos.Sub(new Point(0, 0.1f));
-                        _ballDir = new Point(0.0f, -1.0f);
+                        NewGame();
                     }
                 }
 
-                _ballPos = _ballPos.Clamp(GamesParams.Margin0.Add(_ballSize.Half()),
-                                          GamesParams.Margin1.Sub(_ballSize.Half()));
-
-                // Ball collision with player pad
-                if (_ballPos.IsInside(_playerPos.Sub(_padSize.Half()).Sub(_ballSize.Half()),
-                                      _playerPos.Add(_padSize.Half()).Add(_ballSize.Half())))
+                // Bullet moving
+                for (var i = 0; i < _bulletPos.Count; ++i)
                 {
-                    _ballDir.Y = -1;
-                    _ballDir.X = _ballPos.Sub(_playerPos).X/_padSize.Half().X;
-                    _ballDir = _ballDir.Normalise();
+                    var bulletPos = _bulletPos[i];
+                    _bulletPos[i] = bulletPos.Add(_bulletDir.Mul(BulletSpd).Mul(dt));
+                    bulletPos = _bulletPos[i];
 
-                    _ballSpd += _ballSpdInc;
-                }
-
-                // Ball collision with player pad
-                foreach (var block in _blockPos)
-                {
-                    if (_ballPos.IsInside(block.Sub(_blockSize.Half()).Sub(_ballSize.Half()),
-                                          block.Add(_blockSize.Half()).Add(_ballSize.Half())))
+                    // Bullet collision with borders
+                    if (!bulletPos.IsInside(GamesParams.Margin0.Sub(_bulletSize.Half()),
+                                            GamesParams.Margin1.Add(_bulletSize.Half())))
                     {
-                        if (oldBallPos.X < block.Sub(_blockSize.Half()).Sub(_ballSize.Half()).X ||
-                            oldBallPos.X > block.Add(_blockSize.Half()).Add(_ballSize.Half()).X)
-                            _ballDir.X = -_ballDir.X;
-                        else
-                            _ballDir.Y = -_ballDir.Y;
+                        _bulletPos.RemoveAt(i);
+                        AddEnemy();
+                    }
 
-                        block.X = -100;
-                        block.Y = -100;
-
-                        _gameManager.AddPoints(100);
+                    // Bullet collision with enemies
+                    for (var e = 0; e < _enemyPos.Count; ++e)
+                    {
+                        var enemyPos = _enemyPos[e];
+                        if (bulletPos.IsInside(enemyPos.Sub(_enemySize.Half()).Sub(_bulletSize.Half()),
+                                               enemyPos.Add(_enemySize.Half()).Add(_bulletSize.Half())))
+                        {
+                            _bulletPos.RemoveAt(i);
+                            AddEnemy(e);
+                            AddEnemy();
+                            _gameManager.AddPoints(25);
+                            break;
+                        }
                     }
                 }
             }
 
             // Drawing
-            var anyBlock = false;
-            foreach (var block in _blockPos)
+            foreach (var bullet in _bulletPos)
             {
-                if (block.X < 0)
+                var ballBox = bullet.ToBox(_bulletSize);
+                context.FillRectangle(screenSize.ApplyTo(ballBox), GamesParams.AdditionalColor);
+            }
+
+            foreach (var enemy in _enemyPos)
+            {
+                var box = enemy.ToBox(_enemySize);
+                if (box.Left > GamesParams.MarginX1 || box.Right < GamesParams.MarginX0 || box.Bottom < GamesParams.MarginY0 || box.Top > GamesParams.MarginY1)
                     continue;
 
-                anyBlock = true;
-                var box = block.ToBox(_blockSize);
+                if (box.Left < GamesParams.MarginX0)
+                    box.Left = GamesParams.MarginX0;
+                if (box.Right > GamesParams.MarginX1)
+                    box.Right = GamesParams.MarginX1;
+                if (box.Top < GamesParams.MarginY0)
+                    box.Top = GamesParams.MarginY0;
+                if (box.Bottom > GamesParams.MarginY1)
+                    box.Bottom = GamesParams.MarginY1;
+
                 context.FillRectangle(screenSize.ApplyTo(box), GamesParams.EnemyColor);
             }
 
-            if (!anyBlock)
-            {
-                NewGame();
-                _gameManager.Win(5000);
-            }
-
-            var playerBox = _playerPos.ToBox(_padSize);
-            var ballBox = _ballPos.ToBox(_ballSize);
+            var playerBox = _playerPos.ToBox(_playerSize);
             context.FillRectangle(screenSize.ApplyTo(playerBox), GamesParams.PlayerColor);
-            context.FillRectangle(screenSize.ApplyTo(ballBox), GamesParams.AdditionalColor);
 
             base.Update(context, target, deviceManager, screenSize, dt, elapsedTime);
         }
@@ -173,6 +190,10 @@ namespace MetroRetro.Games
                 case InputType.Right:
                     _playerDir = new Point(1, 0);
                     break;
+
+                case InputType.Up:
+                    _isShootButtonPressed = true;
+                    break;
             }
         }
 
@@ -186,6 +207,10 @@ namespace MetroRetro.Games
 
                 case InputType.Right:
                     _playerDir = new Point(0, 0);
+                    break;
+                    
+                case InputType.Up:
+                    _isShootButtonPressed = false;
                     break;
             }
         }

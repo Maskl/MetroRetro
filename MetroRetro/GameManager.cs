@@ -236,7 +236,7 @@ namespace MetroRetro
                 Page.SetTimeBorderVisibility(Visibility.Visible);
             }
 
-            Start(GameType.GamesCount - 1);
+            Start(GameType.GamesCount - 2);
             Unpause();
 
         }
