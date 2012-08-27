@@ -17,7 +17,7 @@ namespace MetroRetro.Games
         private const float GroundY = 0.7f;
         private const float JumpHeight = 0.2f;
         private const float JumpSpeed = 2.0f;
-        private const float HoleSpdAdd = 0.03f;
+        private const float HoleSpdAdd = 0.05f;
 
         private readonly Point _playerSize = new Point(0.1f, 0.06f);
         private Point _holeSize = new Point(0.06f, 0.08f);

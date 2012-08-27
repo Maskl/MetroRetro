@@ -64,8 +64,8 @@ namespace MetroRetro.Games
                         // Eating apple
                         if (pp.Sub(_apple).Length() < _snakePartSize.X/2 + _appleSize.X/2)
                         {
-                            _snakePossibleSize += 20;
-                            _snakeSpd += 0.01f;
+                            _snakePossibleSize += 25;
+                            _snakeSpd += 0.0125f;
                             PlaceNewApple();
                             _gameManager.Win(500);
                             return;

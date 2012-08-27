@@ -100,6 +100,14 @@ namespace MetroRetro
             return l == 0 ? new Point(0, 0) : new Point(X / l, Y / l);
         }
 
+        static readonly Random Rand = new Random();
+        public Point AddNoise(float noiseScale = 0.1f)
+        {
+            var x = (float)Rand.NextDouble() * noiseScale;
+            var y = (float)Rand.NextDouble() * noiseScale;
+            return new Point(X + x, Y + y);
+        }
+
         public float Length()
         {
             return (float) Math.Sqrt(X*X + Y*Y);

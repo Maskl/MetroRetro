@@ -21,7 +21,7 @@ namespace MetroRetro.Games
         private Point _ballDir;
         private float _ballSpd;
 
-        private const float _ballSpdInc = 0.01f;
+        private const float _ballSpdInc = 0.015f;
 
         private readonly Point _padSize = new Point(0.20f, 0.03f);
         private readonly Point _ballSize = new Point(0.01f, 0.01f);
@@ -63,7 +63,7 @@ namespace MetroRetro.Games
             _ballSpd = 0.3f;
 
             _playerDir = new Point(0.0f, 0.0f);
-            _ballDir = new Point(0.0f, -1.0f);
+            _ballDir = new Point(0.0f, -1.0f).AddNoise().Normalise();
 
             base.NewGame();
         }
@@ -97,7 +97,7 @@ namespace MetroRetro.Games
                             new Point(0.5f, GamesParams.MarginY1).Clamp(GamesParams.Margin0.Add(_padSize.Half()),
                                                                         GamesParams.Margin1.Sub(_padSize.Half()));
                         _ballPos = _playerPos.Sub(new Point(0, 0.1f));
-                        _ballDir = new Point(0.0f, -1.0f);
+                        _ballDir = new Point(0.0f, -1.0f).AddNoise().Normalise();
                         _gameManager.Die();
                         return;
                     }

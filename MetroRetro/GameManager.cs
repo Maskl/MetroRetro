@@ -244,8 +244,19 @@ namespace MetroRetro
         public void StartNextGame()
         {
             Pause(false);
+
             var rand = new Random();
-            Start((GameType)rand.Next((int)GameType.GamesCount));
+
+            while (true)
+            {
+                var gt = (GameType) rand.Next((int) GameType.GamesCount);
+                if (_games[gt] == _currentGame)
+                    continue;
+
+                Start(gt);
+                break;
+            }
+
             Unpause();
         }
 
