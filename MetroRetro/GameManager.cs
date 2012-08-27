@@ -32,10 +32,11 @@ namespace MetroRetro
 
             _games = new Dictionary<GameType, BaseGame>
                          {
-                             {GameType.Test, new Test(this, 3)},
                              {GameType.Pong, new Pong(this, 20)},
                              {GameType.Arkanoid, new Arkanoid(this, 20)},
-                             {GameType.Snake, new Snake(this, 20)}
+                             {GameType.Snake, new Snake(this, 20)},
+                             {GameType.Tigers, new Tigers(this, 20)},
+                             {GameType.MoonPatrol, new MoonPatrol(this, 20)}
                          };
 
             _currentGame = null;
@@ -333,11 +334,12 @@ namespace MetroRetro
 
     public enum GameType
     {
-        Test = 0,
-        Pong = 1,
-        Arkanoid = 2,
-        Snake = 3,
-        GamesCount = 4
+        Pong = 0,
+        Arkanoid = 1,
+        Snake = 2,
+        Tigers = 3,
+        MoonPatrol = 4,
+        GamesCount = 5
     }
 
     public enum InputType
