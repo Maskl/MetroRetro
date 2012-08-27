@@ -51,6 +51,9 @@ namespace MetroRetro.Games
                 (float) _r.NextDouble() * (GamesParams.MarginX1 - GamesParams.MarginX0 - _enemySize.X) + GamesParams.MarginX0 + _enemySize.X / 2, 
                 (float) _r.NextDouble() * 2 - 2.1f);
 
+            if (_enemyPos.Count < 3 && p.Y < -1.1)
+                p.Y += 1;
+
             if (id >= 0)
                 _enemyPos[id] = p;
             else
