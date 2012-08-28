@@ -26,6 +26,8 @@ namespace MetroRetro
 
         public void Create(MainPage mainPage, Renderer renderer)
         {
+            LoadRecord();
+
             Page = mainPage;
             Renderer = renderer;
             IsPause = false;
@@ -40,8 +42,6 @@ namespace MetroRetro
                          };
 
             _currentGame = null;
-
-            LoadRecord();
         }
 
         public void HandleInput(InputType key, InputState state)
@@ -205,17 +205,26 @@ namespace MetroRetro
         public async void StartSession()
         {
             Pause(false);
-            var dialog = new MessageDialog("Choose one of the game modes below.", "Hi!");
+            //var dialog = new MessageDialog("Choose one of the game modes below.", "Hi!");
+
+            //var ans = 0;
+            //var cmd1 = new UICommand("Training", cmd => ans = 1, 1);
+            //var cmd2 = new UICommand("Fast game", cmd => ans = 2, 2);
+
+            //dialog.Commands.Add(cmd1);
+            //dialog.Commands.Add(cmd2);
+            //dialog.DefaultCommandIndex = 0;
+
+            var dialog = new MessageDialog("Tap the button below to start a new game." + ((Record > 0) ? ("\nResult to beat: " + Record) : ""), "Hello!");
 
             var ans = 0;
-            var cmd1 = new UICommand("Training", cmd => ans = 1, 1);
-            var cmd2 = new UICommand("Fast game", cmd => ans = 2, 2);
-
-            dialog.Commands.Add(cmd1);
+            var cmd2 = new UICommand("New game", cmd => ans = 2, 2);
             dialog.Commands.Add(cmd2);
             dialog.DefaultCommandIndex = 0;
 
             await dialog.ShowAsync();
+
+            Page.Show();
 
             IsTraining = ans == 1;
 
@@ -322,6 +331,7 @@ namespace MetroRetro
 
         static public async void LoadRecord()
         {
+            Record = -1;
             var recordInt = 0;
             try
             {

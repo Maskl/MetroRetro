@@ -267,5 +267,11 @@ namespace MetroRetro
             LeftArrowButtonLabel.Text = left;
             RightArrowButtonLabel.Text = right;
         }
+
+        public void Show()
+        {
+            ArrowsContainer.Visibility = Visibility.Visible;
+            MenuContainer.Visibility = Visibility.Visible;
+        }
     }
 }

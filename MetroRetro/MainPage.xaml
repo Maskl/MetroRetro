@@ -11,6 +11,7 @@
     <!-- Arrows buttons -->
     <Grid
         x:Name="ArrowsContainer"
+        Visibility="Collapsed"
         Height="146"
         Width="220"
         HorizontalAlignment="Right"
@@ -163,9 +164,10 @@
         </Border>
     </Grid>
 
-    <!-- Next button -->
+    <!-- Menu button -->
     <Grid
         x:Name="MenuContainer"
+        Visibility="Collapsed"
         Height="50"
         Width="100"
         HorizontalAlignment="Left"
@@ -209,7 +211,7 @@
         Opacity="0">
         <Rectangle
             x:Name="TimeRectangle"
-            Fill="#FF004400"
+            Fill="#FF666666"
             Margin="0,0,0,-2"
             Stroke="Black"
             Canvas.ZIndex="-10"
@@ -221,7 +223,7 @@
     <!-- Points text -->
     <TextBlock
         x:Name="PointsText"
-        Text="00000000"
+        Text=""
         Width="250"
         Height="50"
         HorizontalAlignment="Right"
@@ -239,7 +241,7 @@
     <!-- Lifes text -->
     <TextBlock
         x:Name="LifesText"
-        Text="❤❤❤"
+        Text=""
         Width="250"
         Height="50"
         HorizontalAlignment="Left"

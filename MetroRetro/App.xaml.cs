@@ -54,7 +54,7 @@ namespace MetroRetro
 
             // New CubeRenderer
             _renderer = new Renderer(_gameManager);
-            var fpsRenderer = new FpsRenderer();
+        //    var fpsRenderer = new FpsRenderer();
 
             // Use CoreWindowTarget as the rendering target (Initialize SwapChain, RenderTargetView, DepthStencilView, BitmapTarget)
             _target = new SwapChainBackgroundPanelTarget(_mainPage);
@@ -62,11 +62,11 @@ namespace MetroRetro
             // Add Initializer to device manager
             _deviceManager.OnInitialize += _target.Initialize;
             _deviceManager.OnInitialize += _renderer.Initialize;
-            _deviceManager.OnInitialize += fpsRenderer.Initialize;
+         //   _deviceManager.OnInitialize += fpsRenderer.Initialize;
 
             // Render the cube within the CoreWindow
             _target.OnRender += _renderer.Render;
-            _target.OnRender += fpsRenderer.Render;
+         //   _target.OnRender += fpsRenderer.Render;
 
             // Initialize the device manager and all registered deviceManager.OnInitialize 
             _deviceManager.Initialize(DisplayProperties.LogicalDpi);

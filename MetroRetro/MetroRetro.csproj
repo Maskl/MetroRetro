@@ -14,6 +14,7 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>MetroRetro_TemporaryKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>18070F7A80DCCF3DE7887116335AEC216896CC68</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -170,20 +171,8 @@
     <Reference Include="SharpDX">
       <HintPath>..\packages\SharpDX.2.2.0\lib\winrt\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.D3DCompiler">
-      <HintPath>..\packages\SharpDX.D3DCompiler.2.2.0\lib\winrt\SharpDX.D3DCompiler.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDX.Direct2D1">
       <HintPath>..\packages\SharpDX.Direct2D1.2.2.0\lib\winrt\SharpDX.Direct2D1.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D11">
-      <HintPath>..\packages\SharpDX.Direct3D11.2.2.0\lib\winrt\SharpDX.Direct3D11.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI">
-      <HintPath>..\packages\SharpDX.DXGI.2.2.0\lib\winrt\SharpDX.DXGI.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.MediaFoundation">
-      <HintPath>..\packages\SharpDX.MediaFoundation.2.2.0\lib\winrt\SharpDX.MediaFoundation.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

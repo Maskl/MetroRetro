@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="9a2afdc0-2fd4-40ca-8efa-20df7d52ebac" Publisher="CN=Marek" Version="1.0.0.0" />
+  <Identity Name="9a2afdc0-2fd4-40ca-8efa-20df7d52ebac" Publisher="CN=Marek" Version="0.0.5.1" />
   <Properties>
     <DisplayName>Metro Retro</DisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
@@ -16,11 +16,14 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="MetroRetro.App">
-      <VisualElements DisplayName="MetroRetro" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Metro Retro" ForegroundText="light" BackgroundColor="#222222">
+      <VisualElements DisplayName="Metro Retro" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Metro Retro" ForegroundText="light" BackgroundColor="#000000">
         <DefaultTile ShowName="allLogos" />
-        <SplashScreen Image="Assets\SplashScreen.png" />
+        <SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#000000" />
         <InitialRotationPreference>
+          <Rotation Preference="portrait" />
           <Rotation Preference="landscape" />
+          <Rotation Preference="portraitFlipped" />
+          <Rotation Preference="landscapeFlipped" />
         </InitialRotationPreference>
       </VisualElements>
     </Application>
