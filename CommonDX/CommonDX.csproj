@@ -109,7 +109,6 @@
     <Compile Include="DeviceManager.cs" />
     <Compile Include="DragHandler.cs" />
     <Compile Include="FpsRenderer.cs" />
-    <Compile Include="MediaPlayer.cs" />
     <Compile Include="SurfaceImageSourceTarget.cs" />
     <Compile Include="SwapChainBackgroundPanelTarget.cs" />
     <Compile Include="TargetBase.cs" />
@@ -122,9 +121,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SharpDX.2.2.0\lib\winrt\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.D3DCompiler">
-      <HintPath>..\packages\SharpDX.D3DCompiler.2.2.0\lib\winrt\SharpDX.D3DCompiler.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDX.Direct2D1, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SharpDX.Direct2D1.2.2.0\lib\winrt\SharpDX.Direct2D1.dll</HintPath>
@@ -136,10 +132,6 @@
     <Reference Include="SharpDX.DXGI, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SharpDX.DXGI.2.2.0\lib\winrt\SharpDX.DXGI.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.MediaFoundation, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SharpDX.MediaFoundation.2.2.0\lib\winrt\SharpDX.MediaFoundation.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
